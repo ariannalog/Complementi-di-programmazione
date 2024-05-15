@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+Mat* flipped_mat(Mat *m){
+  Mat *ris=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+    if(i%2==0){
+      int col=m->cols-1;
+    for(int j=0;j<m->cols;j++){
+      ris->mat[i][j]=m->mat[i][col];
+      col--;
+    } 
+  }
+  else{
+    for(int j=0;j<m->cols;j++){
+      ris->mat[i][j]=m->mat[i][j];
+    	} 
+  	}
+  }
+  return ris;
+}
+
+double somma_max(Mat *ris){
+  double somma=0;
+  double somma_max=0;
+  for(int i=0;i<ris->rows/2;i++){
+      for(int j=0;j<ris->cols/2;j++){
+        somma+=ris->mat[i][j];
+    	}
+    }
+  	if (somma>somma_max) somma_max=somma;
+  	somma=0;
+    
+  	for(int k=0;k<ris->rows/2;k++){
+      for(int h=ris->cols/2;h<ris->cols;h++){
+        printf("%lf ",ris->mat[k][h]);
+        somma+=ris->mat[k][h];
+      	}
+    }
+  	if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  
+  	for(int r=ris->rows/2;r<ris->rows;r++){
+      for(int g=0;g<ris->cols/2;g++){
+        somma+=ris->mat[r][g];
+      	}
+    }
+  	if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  	
+  	for(int f=ris->rows/2;f<ris->rows;f++){
+      for(int y=ris->cols/2;y<ris->cols;y++){
+        somma+=ris->mat[f][y];
+      	}
+     }
+  	if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  	return somma_max;
+}
+
+
+int massimo_flip_riga(Mat *m){
+  	if(m->rows==0) return 0;
+  	Mat*ris=flipped_mat(m);
+  	double esito=somma_max(ris);
+    return esito;
+}
