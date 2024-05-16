@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+void sposta_in_coda(TipoLista* l,int k,T e){
+  if(k==0){
+    TipoLista temp=*l;
+    *l=(TipoNodo*)malloc(sizeof(TipoNodo));
+    (*l)->info=e;
+    (*l)->next=temp;
+
+  }
+  else sposta_in_coda(&((*l)->next),k-1,e);
+  
+}
+
+
+void modificaLista(TipoLista* l, int k) {
+	if(estVuota(*l) || k==0) return;
+  	else {sposta_in_coda(&(*l),k,(*l)->info);
+ 		  modificaLista((&(*l)->next),k-1);
+         }
+}
+
+
+double mediaSommaPesataModificaListe(TipoLista* liste, int* v, int n){
+  
+	// TODO: risolvere
+
+  return 0.0;
+}
