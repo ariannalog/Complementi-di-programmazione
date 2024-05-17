@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+int pos_aux(TipoLista l, int k){
+  if(estVuota(l)) return 0;
+  else if(k%2==0){
+	if(estVuota(cdr(l))) return 1;
+    if(!estVuota(cdr(cdr(l)))){
+    	if(car(l)==car(cdr(cdr(l)))){
+          if(k<2) return 2+pos_aux(cdr(l),++k);
+          else return 1+pos_aux(cdr(l),++k);
+        }
+    	else return 1+pos_aux(cdr(l),++k);
+    }
+    return 1;
+  }
+  else{
+    if(!estVuota(cdr(cdr(l)))){
+    	if(car(l)==car(cdr(cdr(l)))) return 2+pos_aux(cdr(l),++k);
+    	else return 1;
+    }
+    return 1;
+  }
+}
+
+
+int posizioni_alternanza(TipoLista l) {
+  return pos_aux(l,0);
+}
+
+
+char * prefisso_alternante(TipoLista *liste, int n) {
+
+	// TODO: risolvere
+
+  return NULL;
+}
