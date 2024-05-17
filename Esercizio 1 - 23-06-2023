@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+
+float somma_diag(Mat *mat, int row, int col) {
+        float somma=0.0;
+  for(int i=0;i<mat->rows;i++){
+    for(int j=0;j<mat->cols;j++){
+    	if(j-i==col-row){
+        	printf("%f ",mat->mat[i][j]);
+            somma+=mat->mat[i][j];
+            }
+          }
+        }
+       return somma;
+      }
