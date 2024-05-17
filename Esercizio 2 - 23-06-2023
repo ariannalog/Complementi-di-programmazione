@@ -1,0 +1,24 @@
+
+#include "aux.h"
+
+
+TipoLista copia(TipoLista l){
+  if(estVuota(l)) return listaVuota();
+  else return cons(car(l),copia(cdr(l))); 
+}
+
+TipoLista append ( TipoLista l , T e){
+if( estVuota (l)) return cons (e ,l) ;
+else return cons (car(l),append(cdr(l),e));
+}
+
+TipoLista ruota(TipoLista l) {
+	if(estVuota(l)) return listaVuota();
+  	else return append(copia(cdr(l)),car(l));
+ }
+
+TipoLista combinazione(TipoLista lucchetto, int password) {
+  if (estVuota(lucchetto)) return listaVuota();
+    if (car(lucchetto) == password) return copia(lucchetto);
+    return combinazione(ruota(lucchetto), password);
+}
