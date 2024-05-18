@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "aux.h"
+
+
+Mat* trasponi(Mat* m){
+Mat* ris=mat_alloc(m->rows,m->cols);
+for(int i=0;i<m->rows;i++){
+	for(int j=0;j<m->cols;j++){
+      ris->mat[i][j]=m->mat[j][i];
+    } 
+  }
+ return ris;
+}
+
+
+Mat* trasponi_e_massima_diagonale(Mat* m) {
+  int somma_max=0;
+  Mat*trasp=trasponi(m); //crea una matrice trasposta;
+  printf("\n");
+  for(int k=0;k<m->rows/2-1;k++){     //stampa della 
+    for(int h=0;h<m->cols/2-1;h++){   //matrice
+      printf("%d ",trasp->mat[k][h]); //trasposta
+    }
+    printf("\n");
+  }
+  
+  int N=trasp->rows/2;
+  Mat*ris=mat_alloc(N,N);  //creo una matrice di mezze dimensioni;                
+  for(int k=0;k<=N;k++){
+    for(int h=0;h<=N;h++){
+      int somma=0;
+      for(int y=0;y<N;y++){
+        somma+=trasp->mat[k+y][h+y];
+      	}
+      if(somma>somma_max){
+        somma_max=somma;
+        for(int i=0;i<N;i++){
+          for(int j=0;j<N;j++){
+            ris->mat[i][j]=trasp->mat[i+k][j+h];
+          }
+        }
+      
+    }
+    
+  }
+  }
+  return ris;
+}
