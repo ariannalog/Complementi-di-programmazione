@@ -1,0 +1,24 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+void aux(TipoAlbero a, int k, int somma){
+  if(estVuoto(a)) return;
+  if (somma%k==0) a->info=a->info+k;
+  else a->info=a->info-k;
+  somma+=radice(a);
+  aux(sinistro(a),k,somma);
+  aux(destro(a),k,somma);
+  
+}
+
+
+void cambiaNodoDalCammino(TipoAlbero a, int k) {
+	return aux(a,k,0);
+	// TODO: da svolgere
+	return;
+}
+
