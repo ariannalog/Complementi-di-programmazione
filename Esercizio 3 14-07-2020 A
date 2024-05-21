@@ -1,0 +1,10 @@
+#include "aux.h"
+
+TipoInfoAlbero sommaMassimaPercorso(TipoAlbero a){
+	if(estVuoto(a)) return 0;
+  	if(estVuoto(sinistro(a)) && estVuoto(destro(a))) return radice(a);
+  	if(estVuoto(sinistro(a)) && !estVuoto(destro(a))) return radice(a)+sommaMassimaPercorso(destro(a));
+  	if(estVuoto(destro(a)) && !estVuoto(sinistro(a))) return radice(a)+sommaMassimaPercorso(sinistro(a));
+  	else if(sommaMassimaPercorso(sinistro(a))>sommaMassimaPercorso(destro(a))) return radice(a)+sommaMassimaPercorso(sinistro(a));
+  	else return radice(a)+sommaMassimaPercorso(destro(a));
+}
