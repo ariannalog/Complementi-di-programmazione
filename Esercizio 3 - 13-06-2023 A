@@ -18,7 +18,6 @@ void aux(TipoAlbero a, int k, int somma){
 
 void cambiaNodoDalCammino(TipoAlbero a, int k) {
 	return aux(a,k,0);
-	// TODO: da svolgere
-	return;
+
 }
 
