@@ -1,0 +1,32 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+TipoAlbero espandi_aux(TipoAlbero a,float k, float somma, float ind){
+  if(estVuoto(a)) return albBinVuoto();
+  if(foglia(a) && k<=(somma/ind)){
+       printf("media: %f foglia: %d indice:%f somma: %f \n",somma/ind,radice(a),ind,somma);
+    return creaAlbBin(radice(a),creaAlbBin(radice(a),albBinVuoto(),albBinVuoto()),albBinVuoto());
+  }
+  if(foglia(a) && k>(somma/ind-1)){
+    printf("media: %f foglia: %d indice:%f somma: %f \n",somma/ind,radice(a),ind,somma);
+    return creaAlbBin(radice(a),creaAlbBin(-(radice(a)),albBinVuoto(),albBinVuoto()),albBinVuoto());
+  }
+  somma+=radice(a);
+  printf("%f \n",somma);
+  ind++;
+  return creaAlbBin(radice(a),espandi_aux(sinistro(a),k,somma,ind),espandi_aux(destro(a),k,somma,ind));
+}
+
+
+TipoAlbero espandiAlbero(TipoAlbero a, int k) {
+  if(estVuoto(a)) return albBinVuoto();
+  return espandi_aux(a,k,0,0);
+}
+
