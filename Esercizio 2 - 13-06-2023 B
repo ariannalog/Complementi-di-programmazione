@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+//aux che calcola la lunghezza 
+int leng(TipoLista l){ 
+  if(estVuota(l)) return 0;
+  else return 1+leng(cdr(l));
+}
+
+//aux che effettua la copia
+TipoLista copy(TipoLista l){
+  if(estVuota(l)) return listaVuota();
+else return cons(car(l),copy(cdr(l)));
+}
+
+//questa funzione restituisce una lista corrispondente alla prima parte che va inserita in testa alla lista risultante;
+TipoLista prima_parte(TipoLista l,int k){
+  if(estVuota(l)) return listaVuota();
+  if(k>0) return cons(car(l),prima_parte(cdr(l),k-1));
+  else return prima_parte(cdr(l),k);
+}
+
+//questa funzione restituisce una lista corrispondente all'ultima parte che va inserita in coda alla lista risultante(ovvero quella complementare alla lista calcolata dalla funzione precedente);
+TipoLista ultima_parte(TipoLista l,int k){
+  if(estVuota(l)) return listaVuota();
+  if(k>0) return ultima_parte(cdr(l),k-1);
+  else return cons(car(l),ultima_parte(cdr(l),k));
+}
+
+//questa funzione concatena la seconda e terza parte della lista risultante;
+TipoLista concatena(TipoLista l1,TipoLista l2,int k){   //k corrisponde alla lunghezza di l2. questo ci permette di capre quando fermarci
+  if(estVuota(l2)) return copy(l1);   // se la seconda parte è vuota, allora il risultato sarà composto solo dalla terza parte
+  if(k>0) return cons(car(l2),concatena(l1,cdr(l2),k-1));  //fin quando k è positivo(dato che viene decrementato ricorsivamente), allora dobbiamo ancora arrivare alla fine della seconda parte, dunque dobbiamo aggiungere
+  else return concatena(l1,cdr(l2),k);   //se k<0 allora dobbiamo solo scorrere la lista fino ad arrivare alla fine senza aggiungere niente;
+}
+
+//FUNZIONE PRINCIPALE
+TipoLista inserisciLista(TipoLista l1, TipoLista l2, int k) {
+	if(estVuota(l1)) return copy(l2);
+  	TipoLista prima=prima_parte(l1,k); 
+  	TipoLista ultima=ultima_parte(l1,k);
+  	TipoLista seconda=concatena(ultima,l2,leng(l2));
+  	TipoLista finale=concatena(seconda,prima,leng(l1));
+  	return finale;
+}
+
+
+//2.2
+
+//questa funzione calcola il massimo di una lista
+int maxi(TipoLista l, int n){ //n sarebbe il massimo, inizialmente postov a 0 e aggiornato di volta in volta. Attraverso il passaggio di paramentro siamo sicuri di aggiornare sempre.
+  if(estVuota(l)) return n;
+  if(car(l)>n){
+    n=car(l);
+    return maxi(cdr(l),n);
+  }
+  else return maxi(cdr(l),n);
+}
+
+//FUNZIONE PRINCIPALE
+TipoLista argmaxListeInserite_aux(TipoLista* liste1, TipoLista* liste2, int n, int k,int pos){
+  if(n==0) return listaVuota();
+  if(pos<n){   //eseguo questo if fin quando arrivo alla fine dell'array di liste
+    int maxi1=maxi(liste1[pos],0);   //calcolo il primo massimo;
+    int maxi2=maxi(inserisciLista(liste1[pos],liste2[pos],k),0);   //calcolo il secondo massimo 
+    if(maxi1==maxi2) return cons(1,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos)); //se la condizione è verificata aggiungo 1 e chiamo ricorsivamente ricordandomi di decrementare la dimensione dell'array e incrementare la posizione
+       else return cons(0,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos)); //lo stesso ma aggiungendo 0
+  }
+  return argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos+1);
+}
+
+TipoLista argmaxListeInserite(TipoLista* liste1, TipoLista* liste2, int n, int k){
+  return argmaxListeInserite_aux(liste1,liste2,n,k,0);
+}
+
