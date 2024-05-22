@@ -1,0 +1,16 @@
+#include "aux.h"
+
+void applicaFiltro(Mat *src, Mat * filtro, int riga, int colonna){
+  for(int i=0;i<src->rows;i++){
+    for(int j=0;j<src->cols;j++){
+      if(i==riga && j==colonna){
+        for(int k=0;k<filtro->rows;k++){
+          for(int h=0;h<filtro->cols;h++){
+            src->row_ptrs[i+k][j+h]*=filtro->row_ptrs[k][h]; 
+          }
+        }
+    } 
+  }
+ }   
+  return;
+}
