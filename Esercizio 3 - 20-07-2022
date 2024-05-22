@@ -1,0 +1,27 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+//aux foglia
+bool foglia(TipoAlbero a){ 
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+
+int somma_max_cammino(TipoAlbero a){
+ if(estVuoto(a)) return 0;
+ if(foglia(a)) return radice(a);    //se è una foglia, l'unica somma possibile coincide con la radice
+ if(estVuoto(sinistro(a)) && !estVuoto(destro(a))) return radice(a)+somma_max_cammino(destro(a));   //se è vuoto a sinistra esegui a destra;
+ if(estVuoto(destro(a)) && !estVuoto(sinistro(a))) return radice(a)+somma_max_cammino(sinistro(a));   // se è vuoto a destra esegui a sinistra;
+ else if(somma_max_cammino(sinistro(a)) >somma_max_cammino(destro(a))) return radice(a)+somma_max_cammino(sinistro(a));   //se nessuno dei due sottoalbero è vuoto, considera quello con la somma dei nodi maggiore
+ else return radice(a)+somma_max_cammino(destro(a));
+}
+
+
+TipoAlbero figlio_lontano(TipoAlbero a) {
+	if(estVuoto(a)) return albBinVuoto();    //in questa funzione non serve fare controlli aggiuntivi (oltre estVuoto), perche questi vengono già fatti nella funzione somma_max_cammino;
+  	return creaAlbBin(somma_max_cammino(a),figlio_lontano(sinistro(a)),figlio_lontano(destro(a)));
+}
