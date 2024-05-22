@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+int* controlla_colonne(Mat *m, double w, double v){
+  int*ris=(int*)malloc(m->cols*sizeof(int));
+  for(int i=0;i<m->cols;i++){
+     float somma=0;
+    for(int j=0;j<m->rows;j++){
+      somma+=m->mat[j][i]; 
+      printf("%f ",somma);
+    }
+  if((somma/m->rows)<=v && (somma/m->rows)>=w) ris[i]=1;
+  else ris[i]=0;
+  }
+  return ris;
+}
