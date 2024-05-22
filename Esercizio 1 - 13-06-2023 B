@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+Mat* flippa(Mat *m){
+  Mat* flipped=mat_alloc(m->rows,m->cols);
+  int i=m->rows-1;
+  int j=m->cols-1;
+  for(int k=0;k<flipped->rows;k++){
+    for(int h=0;h<flipped->cols;h++){
+      	if(h%2!=0) flipped->mat[k][h]=m->mat[m->rows-k-1][h];
+      	else flipped->mat[k][h]=m->mat[k][h];
+    	}
+	}
+ return flipped; 
+}
+
+int massimo_flip_colonna(Mat *m){
+  Mat*flip=flippa(m);
+  int somma=0;
+  int somma_max=0;
+  int N=flip->rows/2;
+  
+  for(int i=0;i<N;i++){ //somma da (0,0)
+    for(int j=0;j<N;j++){
+      somma+=flip->mat[i][j];
+    }
+  }
+  if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  
+  for(int k=0; k<N; k++){ //somma da(0,N)
+    for(int h=N; h<flip->cols; h++){
+      somma+=flip->mat[k][h];
+      }
+   }
+  if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  
+  for(int w=flip->rows/2; w<m->rows;w++){ //somma da (N,0)
+    for(int y=0; y<m->cols/2; y++){
+      somma+=flip->mat[w][y];
+      }
+   }
+  if (somma>somma_max) somma_max=somma;
+  	somma=0;
+  
+  for(int q=N; q<m->rows; q++){ //somma da(N,N)
+    for(int x=N; x<m->cols; x++){
+      somma+=flip->mat[q][x];
+      }
+   }
+  if (somma>somma_max) somma_max=somma;
+  return somma_max;
+}
