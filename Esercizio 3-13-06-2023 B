@@ -10,11 +10,11 @@ bool foglia(TipoAlbero a){
 
 TipoAlbero espandi_aux(TipoAlbero a,float k, float somma, float ind){
   if(estVuoto(a)) return albBinVuoto();
-  if(foglia(a) && k<=(somma/ind)){
+  if(foglia(a) && k<(somma/ind)){
        printf("media: %f foglia: %d indice:%f somma: %f \n",somma/ind,radice(a),ind,somma);
     return creaAlbBin(radice(a),creaAlbBin(radice(a),albBinVuoto(),albBinVuoto()),albBinVuoto());
   }
-  if(foglia(a) && k>(somma/ind-1)){
+  if(foglia(a) && k>=(somma/ind-1)){
     printf("media: %f foglia: %d indice:%f somma: %f \n",somma/ind,radice(a),ind,somma);
     return creaAlbBin(radice(a),creaAlbBin(-(radice(a)),albBinVuoto(),albBinVuoto()),albBinVuoto());
   }
@@ -27,6 +27,7 @@ TipoAlbero espandi_aux(TipoAlbero a,float k, float somma, float ind){
 
 TipoAlbero espandiAlbero(TipoAlbero a, int k) {
   if(estVuoto(a)) return albBinVuoto();
+  if(foglia(a)) return creaAlbBin(radice(a),creaAlbBin(-radice(a),albBinVuoto(),albBinVuoto()),albBinVuoto());
   return espandi_aux(a,k,0,0);
 }
 
