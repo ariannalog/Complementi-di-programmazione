@@ -1,0 +1,21 @@
+#include "aux.h"
+
+void nodoDivisibile(TipoAlbero a) {
+  
+  // se è vuoto o non ha figli resta inalterato;
+    if(a==NULL || (a->sinistro==NULL && a->destro==NULL)) return;
+  	else if(a->sinistro!=NULL && a->destro==NULL){
+      if(a->sinistro->info!=0 && a->info%a->sinistro->info==0 || a->info==0 && a->sinistro->info!=0) a->info=1; 
+      nodoDivisibile(a->sinistro);
+    }
+   
+    else if(a->destro!=NULL && a->sinistro==NULL){
+     if(a->destro->info!=0 && a->info%a->destro->info==0 || a->info==0 && a->destro->info!=0) a->info=1;
+      nodoDivisibile(a->destro);
+    }
+  	else{
+      if(a->sinistro->info!=0 && a->info%a->sinistro->info==0 || a->destro->info!=0 && a->info%a->destro->info==0 || a->info==0 && (a->sinistro->info!=0 || a->destro->info!=0)) a->info=1;
+      nodoDivisibile(a->sinistro);
+       nodoDivisibile(a->destro);
+    }
+}
