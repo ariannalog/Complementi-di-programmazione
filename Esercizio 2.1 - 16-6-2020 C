@@ -1,0 +1,40 @@
+#include "aux.h"
+
+TipoSCL add(TipoSCL lis, TipoInfoSCL e){
+  TipoSCL temp=(TipoSCL)malloc(sizeof(TipoNodoSCL)); //creo il nuovo nodo da inserire;
+  temp->info=e; //lo inizializzo con il nuovo valore 
+  temp->next=NULL; //nel campo next ci metto null perchè sarà l'ultmo elemento
+  if(lis==NULL) return temp; //se la lista è vuota restituisci solo il nuovo nodo 
+  TipoSCL c=lis; //puntatore che scorre sulla lista 
+  while(c->next!=NULL){ //si ferma quando arriva alla fine della lista 
+    c=c->next; 
+  }
+  c->next=temp; //attacca temp alla fine 
+  return lis; //restituisce lis
+}
+
+int contaDecrescenti(TipoSCL lis){
+if(lis==NULL || lis->next==NULL) return 0;
+else if(lis->next->info < lis->info) return 1+contaDecrescenti(lis->next);
+else return contaDecrescenti(lis->next);
+}
+
+int mergeSequenziale(TipoSCL lis1, TipoSCL lis2){
+TipoSCL ris=(TipoSCL)malloc(sizeof(TipoNodoSCL));
+ris=NULL;
+if(lis1==NULL && lis2==NULL) return 0;
+if(lis1==NULL && lis2!=NULL) return contaDecrescenti(lis2);
+if(lis1!=NULL && lis2==NULL) return contaDecrescenti(lis1);
+while(lis1!=NULL || lis2!=NULL){
+  if(lis1!=NULL){
+    ris=add(ris,lis1->info);
+    lis1=lis1->next;
+  }
+  if(lis2!=NULL){
+    ris=add(ris,lis2->info);
+    lis2=lis2->next;
+  }
+}
+ return contaDecrescenti(ris);
+}
+  
