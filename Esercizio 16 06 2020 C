@@ -1,61 +1,16 @@
 #include "aux.h"
 
-void affonda_nave(Mat *src,int r,int c){
-  
-       
-    if(r-1>=0 && src->row_ptrs[r-1][c]==1){
-      src->row_ptrs[r][c]=0;
-      int k=r-1;
-      while(src->row_ptrs[k][c]==1){
-        if(k>=0){     
-        src->row_ptrs[k][c]=0;     
-      }
-     k--;   
-    }
-    }
-    else if(r+1>=0 && src->row_ptrs[r+1][c]==1){                    
-      if(src->row_ptrs[r][c]==1) src->row_ptrs[r][c]=0;
-      int h=r+1;                                           
-      while(src->row_ptrs[h][c]==1){
-        if(h!=src->rows+1){     
-        src->row_ptrs[h][c]=0;
-        }
-        h++;
-      	}
-      }
-    else if(c-1>=0 && src->row_ptrs[r][c-1]==1){
-      src->row_ptrs[r][c]=0;
-      int u=c-1;                    
-      while(src->row_ptrs[r][u]==1){
-        if(u>=0){  
-        src->row_ptrs[r][u]=0;
-        }
-        u--;
-      	}
-    }
-    else if(c+1>=0 && src->row_ptrs[r][c+1]==1){
-      if(src->row_ptrs[r][c]==1) src->row_ptrs[r][c]=0;
-      int y=c+1;                    
-      while(src->row_ptrs[r][y]==1){
-        if(y!=src->cols+1){  
-        src->row_ptrs[r][y]=0;
-        }
-        y++;
-      	}
-    }
-  return;
-}
-
-
 void bombardamentoNavale(Mat *src, int r, int c){
-  printMatrix(src);
-  for(int i=0;i<src->rows;i++){
-    for(int j=0;j<src->cols;j++){
-      if (i==r && j==c && src->row_ptrs[r][c]==1) affonda_nave(src,i,j);
-    }
-    
-  }
 
+  if(r>=src->rows || r<0) return;
+  if(c>=src->cols || c<0) return;
+  	if(src->row_ptrs[r][c]==1){ //Modifica l'elemento da 1 a 0
+      src->row_ptrs[r][c]=0;
+      bombardamentoNavale(src,r+1,c);
+      bombardamentoNavale(src,r-1,c);
+      bombardamentoNavale(src,r,c+1);
+      bombardamentoNavale(src,r,c-1);
+      return;
+  	}
   return;
 }
-
