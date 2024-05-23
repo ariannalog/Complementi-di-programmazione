@@ -1,0 +1,39 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+int max_nodo(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  int s=max_nodo(sinistro(a));
+  int d=max_nodo(destro(a));
+  if(s>=d){
+    if(s>radice(a)) return s;
+    else return radice(a);
+  }
+  if(d>radice(a)) return d;
+  else return radice(a);
+} 
+
+int min_nodo(TipoAlbero a){
+  if(estVuoto(a)) return 104;
+  int s=min_nodo(sinistro(a));
+  int d=min_nodo(destro(a));
+  if(s<=d){
+    if(s<radice(a)) return s;
+    else return radice(a);
+  }
+  if(d<radice(a)) return d;
+  else return radice(a);
+} 
+
+int sinistroMenoDestro(TipoAlbero a) {
+  if(estVuoto(a)) return 0;
+  printf("%d ",max_nodo(sinistro(a)));
+  printf("%d ",min_nodo(destro(a)));
+  return max_nodo(sinistro(a))-min_nodo(destro(a));
+
+}
+
