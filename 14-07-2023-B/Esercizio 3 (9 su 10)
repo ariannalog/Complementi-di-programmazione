@@ -1,0 +1,63 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+int somma(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  else return radice(a)+somma(sinistro(a)) + somma(destro(a));
+}
+
+int conta_dispari(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  if(radice(a)%2!=0) return 1+conta_dispari(sinistro(a)) + conta_dispari(destro(a));
+  else return conta_dispari(sinistro(a)) + conta_dispari(destro(a));
+}
+
+int maxi(TipoAlbero a,int max){
+  if(estVuoto(a)) return max;
+  if(radice(a)>max){
+    max=radice(a);
+  	int s=maxi(sinistro(a),max);
+  	int d=maxi(destro(a),max);
+  	if(s>=d && s>max){ max=s; return max;}
+    else if(s<d && d>max) {max=d; return max;}
+    return max;
+  }
+  int s=maxi(sinistro(a),max);
+  int d=maxi(destro(a),max);
+  if(s>=d) {max=s; return max;}
+  return d; 
+}
+
+int mini(TipoAlbero a,int min){
+  if(estVuoto(a)) return min;
+  if(radice(a)<min){
+    min=radice(a);
+  	int s=mini(sinistro(a),min);
+  	int d=mini(destro(a),min);
+  	if(s<=d && s<min){ min=s; return min;}
+    else if(s>d && d<min) {min=d; return min;}
+    return min;
+  }
+  int s=mini(sinistro(a),min);
+  int d=mini(destro(a),min);
+  if(s>=d) {min=s; return min;}
+  return d; 
+}
+
+
+void diffSommaMinMaxDispari(TipoAlbero a) {
+  if(estVuoto(a)) return;
+  if(conta_dispari(sinistro(a))>=conta_dispari(destro(a))) a->info=(maxi(sinistro(a),-100)+mini(sinistro(a),100))-(maxi(destro(a),-100)+mini(destro(a),100));
+  else a->info=(maxi(destro(a),-100)+mini(destro(a),100))-(maxi(sinistro(a),-100)+mini(sinistro(a),100));;
+  diffSommaMinMaxDispari(a->sinistro);
+  diffSommaMinMaxDispari(a->destro);
+}
+
