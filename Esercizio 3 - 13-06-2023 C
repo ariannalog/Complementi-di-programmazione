@@ -1,0 +1,24 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+
+TipoAlbero alberoPiuDistanzaNodo_aux(TipoAlbero a,int k) {
+  if(estVuoto(a)) return albBinVuoto();
+  if(k==0) return creaAlbBin(radice(a),alberoPiuDistanzaNodo_aux(sinistro(a),k+1),alberoPiuDistanzaNodo_aux(destro(a),k+1));
+  else return creaAlbBin(k+radice(a),alberoPiuDistanzaNodo_aux(sinistro(a),k+1),alberoPiuDistanzaNodo_aux(destro(a),k+1));
+}
+
+TipoAlbero alberoPiuDistanzaNodo(TipoAlbero a) {
+  if(estVuoto(a)) return albBinVuoto();
+  return alberoPiuDistanzaNodo_aux(a,0);
+  
+}
+
