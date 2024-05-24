@@ -1,0 +1,52 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+
+//è una foglia?: 
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+//questa funzione calcola la somma dei valori dei nodi di un albero:
+int somma(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  else return radice(a)+somma(sinistro(a))+somma(destro(a));
+}
+
+//questa funzione conta il numero di nodi pari di un albero:
+int conta_pari(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  else if(radice(a)%2==0) return 1+conta_pari(sinistro(a))+conta_pari(destro(a));
+  else return conta_pari(sinistro(a))+conta_pari(destro(a));
+}
+
+//questa funzione calcola la somma del sottoalbero con il maggior numero di nodi pari:
+int somma_maxpari(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  int s=conta_pari(sinistro(a));
+  int d=conta_pari(destro(a));
+  if(s>=d) return somma(sinistro(a));
+  else return somma(destro(a));
+}
+
+//questa funzione calcola la somma del sottoalbero con il minor numero di nodi pari:
+int somma_minpari(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  int s=conta_pari(sinistro(a));
+  int d=conta_pari(destro(a));
+  if(s<d) return somma(sinistro(a));
+  else return somma(destro(a));
+}
+
+//funzione principale:
+TipoAlbero maxMenoMinPari(TipoAlbero a) {
+  if(estVuoto(a)) return albBinVuoto();
+  int somma_max=somma_maxpari(a);
+  int somma_min=somma_minpari(a);
+  else return creaAlbBin(somma_max-somma_min,maxMenoMinPari(sinistro(a)),maxMenoMinPari(destro(a)));
+}
+
