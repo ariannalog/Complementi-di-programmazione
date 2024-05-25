@@ -1,0 +1,29 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+ bool foglia(TipoAlbero a){
+   return(estVuoto(sinistro(a)) && estVuoto(destro(a)));
+ }
+
+TipoAlbero aux(TipoAlbero a,int dist_prox,int dist_curr,int ant_prox) {
+  if(estVuoto(a)) return albBinVuoto();
+  if(dist_prox==0){ // ovvero mi trovo sulla radice;
+     ant_prox=radice(a); //l'antenato dei sottoalberi sarà la radice dell'albero;
+    dist_prox=1; //la distanza dei prossimi noti dalla radice è 1;
+    return creaAlbBin(radice(a),aux(sinistro(a),dist_prox,dist_curr,ant_prox),aux(destro(a),dist_prox,dist_curr,ant_prox));
+  	}
+  dist_curr=dist_prox; //mi trovo sul nodo successivo;la distanza è 1;
+  if(radice(a)<ant_prox) {ant_prox=radice(a); dist_prox=1; } //se la radice è minore dell'antenato incontrato prima,la aggiorno per i nodi successivi;automaticamente la distanza sarà 1
+  else dist_prox=dist_curr+1; //altrimenti, l'antenato minore è sempre il primo, dunque incremento solo la distanza da questo (per il prossimo nodo);
+  return creaAlbBin(radice(a)+dist_curr,aux(sinistro(a),dist_prox,dist_curr,ant_prox),aux(destro(a),dist_prox,dist_curr,ant_prox));
+  }
+  
+
+TipoAlbero sommaDistMinAntenato(TipoAlbero a) {
+  if(estVuoto(a)) return albBinVuoto();
+  return aux(a,0,0,0);
+}
+
