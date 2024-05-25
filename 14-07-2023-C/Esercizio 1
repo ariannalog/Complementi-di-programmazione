@@ -1,0 +1,105 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "aux.h"
+
+
+//questa funzione restituisce una matrice modificata come richiesto:
+
+Mat* inverti(Mat*m){
+  Mat* ris=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+    for(int j=0;j<m->cols;j++){
+      if(i<j && m->mat[i][j]%2==0) ris->mat[i][j]=-(m->mat[i][j]);
+      else if(i>=j && m->mat[i][j]%2!=0) ris->mat[i][j]=-(m->mat[i][j]);
+      else ris->mat[i][j]=m->mat[i][j];
+    }
+  }
+  return ris;
+}
+
+//questa matrice costruisce la matrice da restituire
+
+Mat*costruisci(Mat*m,int riga,int colonna){ //riga e colonna infatti sono le coordinate della sottomatrice NxN con media maggiore
+  Mat*esito=mat_alloc(m->rows/2,m->cols/2);
+  for(int i=0;i<m->rows;i++){
+    for(int j=0;j<m->cols;j++){
+      if(i==riga && j==colonna){
+        for(int k=0;k<m->rows/2;k++){
+          for(int h=0;h<m->rows/2;h++){
+            esito->mat[k][h]=m->mat[i+k][j+h];
+        	}
+  		}
+      }
+    }
+  }  
+  return esito;
+}
+  
+
+Mat* inverti_e_max_quad(Mat* m) {
+  Mat*ris=inverti(m);
+  mat_print(ris);
+  Mat*esito=mat_alloc(ris->rows/2,ris->cols/2);
+  int r,c,riga,colonna,somma=0,somma_max=0;
+  int elem=ris->rows/2*ris->cols/2;
+  
+  for(int i=0;i<ris->rows/2;i++){ //sottomatrice (0,0);
+    r=0;
+    for(int j=0;j<ris->cols/2;j++){
+      c=0;
+      somma+=ris->mat[i][j];
+  	}
+  }
+  if(somma/elem>somma_max){
+    somma_max=somma/elem;
+  	riga=r;
+  	colonna=c;
+  }
+  somma=0;
+ 
+  for(int a=0;a<ris->rows/2;a++){ //sottomatrice(0,N)
+    r=0;
+    for(int b=ris->cols/2;b<ris->cols;b++){
+      c=ris->cols/2;
+      somma+=ris->mat[a][b];
+    }
+  }
+  if(somma/elem>somma_max){
+    somma_max=somma/elem;
+    riga=r;
+    colonna=c;
+   	}
+  somma=0;
+  
+  for(int s=ris->rows/2;s<ris->rows;s++){ //sottomatrice (N,0);
+    r=ris->rows/2;
+    for(int w=0;w<ris->cols/2;w++){
+      c=0;
+      somma+=ris->mat[s][w];
+    }
+  }
+  if(somma/elem>somma_max){
+    somma_max=somma/elem;
+   	riga=r;
+    colonna=c;
+ 	}
+  somma=0;
+  
+  for(int q=ris->rows/2;q<ris->rows;q++){ //sottomatrice (N,N);
+    r=ris->rows/2;
+    for(int z=ris->cols/2;z<ris->cols;z++){
+      c=ris->cols/2;
+      somma+=ris->mat[q][z];
+    }
+  }
+  if(somma/elem>somma_max){
+    somma_max=somma/elem;
+    riga=r;
+    colonna=c; 
+  	}
+  return costruisci(ris,riga,colonna);
+  }
+  
+
