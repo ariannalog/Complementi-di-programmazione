@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+
+Mat* cambia_segno(Mat*m){
+  Mat*ris=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+    for(int j=0;j<m->cols;j++){
+      if((i+j)%2!=0) ris->mat[i][j]=-(m->mat[i][j]);
+      else ris->mat[i][j]=m->mat[i][j];
+    }
+  }
+  return ris;
+}
+
+int cambia_segno_e_massima_somma(Mat* m) {
+  double somma=0;
+  double somma_max=-100;
+Mat*ris=cambia_segno(m);
+mat_print(ris);
+  for(int i=0;i<(int)ris->rows/2;i++){
+    for(int j=0;j<ris->cols;j++){
+      if(i!=j && (i+j)!=ris->rows-1 && j!=0 && j!=ris->cols-1) somma+=ris->mat[i][j];
+      }
+    }
+  printf("Somma: %lf \n",somma);
+  if(somma>somma_max) somma_max=somma;
+  somma=0;
+  for(int k=0;k<ris->rows;k++){
+    for(int h=0;h<(int)ris->cols/2;h++){
+      if(k!=h && (k+h)!=ris->rows-1 && k!=0 && k!=ris->rows-1) somma+=ris->mat[k][h];
+    }
+  }
+  printf("Somma: %lf \n",somma);
+  if(somma>somma_max) somma_max=somma;
+  somma=0;
+  for(int a=ris->rows/2+1;a<ris->rows;a++){
+    for(int b=0;b<(int)ris->cols;b++){
+      if(a!=b && a+b!=ris->rows-1 && b!=0 && b!=ris->cols-1) somma+=ris->mat[a][b];
+    }
+  }
+  printf("Somma: %lf \n",somma);
+  if(somma>somma_max) somma_max=somma;
+  somma=0;
+  for(int y=ris->rows/2+1;y<ris->rows;y++){
+    for(int u=ris->cols/2;u<ris->cols;u++){
+      if(y!=u && y+u!=ris->rows-1 && y!=0 && y!=ris->rows-1) somma+=ris->mat[y][u];
+    }
+  }
+  printf("Somma: %lf \n",somma);
+  if(somma>somma_max) somma_max=somma;
+  return somma_max;
+}
