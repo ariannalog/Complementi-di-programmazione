@@ -1,0 +1,28 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+TipoAlbero aux(TipoAlbero a,int max,int min){
+  if(estVuoto(a)) return albBinVuoto();
+  else if (!foglia(a)){
+    if(radice(a)>max) max=radice(a);
+    if(radice(a)<min) min=radice(a);
+    return creaAlbBin(radice(a),aux(sinistro(a),max,min),aux(destro(a),max,min));
+  	}
+  else if ((max-min)%2==0) return creaAlbBin(radice(a),creaAlbBin(radice(a)+min,albBinVuoto(),albBinVuoto()),albBinVuoto());
+  else return albBinVuoto();
+}
+
+TipoAlbero mod_diff_antenati(const TipoAlbero a) {
+	if(estVuoto(a)) return albBinVuoto();
+  if(foglia(a)) return creaAlbBin(radice(a),creaAlbBin(radice(a),albBinVuoto(),albBinVuoto()),albBinVuoto());
+  return aux(a,-100,100);
+}
+
