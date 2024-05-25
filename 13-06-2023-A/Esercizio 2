@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+void sposta_in_coda(TipoLista l,int k,T info){
+  if(k==1){
+    TipoLista elem=(TipoLista)malloc(sizeof(TipoNodo));
+    elem->info=info;
+    elem->next=NULL;
+    l->next=elem;
+    return;
+  }
+  sposta_in_coda(l->next,k-1,info);
+}
+
+
+void modificaLista(TipoLista* l, int k) {
+  if(*l==NULL || k<=0) return;
+  sposta_in_coda((*l)->next,length((*l)->next),(*l)->info);
+  *l=(*l)->next;
+  modificaLista(&(*l),k-1);
+}
