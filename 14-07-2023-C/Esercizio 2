@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+
+double somma(TipoLista l){
+  if(estVuota(l)) return 0.0;
+  else return car(l)+somma(cdr(l));
+}
+
+TipoLista aux(TipoLista l,int prec,int curr,int pos,int len){
+ if(estVuota(l)) return listaVuota();
+ if(pos==0){ //mi trovo in prima posizone;
+   if(car(l)>=curr) curr=car(l);
+   return cons(prec-(int)(somma(cdr(l))/length(cdr(l))),aux(cdr(l),prec,curr,pos+1,len)); 
+ 	}
+ else if(pos<len-1){ //mi trovo in mezzo
+   prec=curr;
+   if(car(l)>curr) curr=car(l);
+   return cons(prec-(int)(somma(cdr(l))/length(cdr(l))),aux(cdr(l),prec,curr,pos+1,len)); 
+   }
+ prec=curr; //mi trovo alla fine
+ return cons(prec-0,aux(cdr(l),prec,curr,pos+1,len));
+ }
+
+TipoLista mediaMenoMax(TipoLista l) {
+  if(estVuota(l)) return listaVuota();
+  return aux(l,0,0,0,length(l));
+}
+
+
+
+int* massimiElementi(TipoLista* liste, int n){
+  int max_leng=0;
+  int maxi=0;
+  for(int i=0;i<n;i++){
+    if(length(liste[i])>max_leng) max_leng=length(liste[i]);
+       }
+  int* ris=(int*)malloc(max_leng*sizeof(int));
+  for(int j=0;j<n;j++){
+    while(!estVuota(liste[i])){
+    	if(car(liste[j])>maxi) max=car(liste[j]);
+    	ris[j]=max;
+      	
+  		}
+  liste[i]=cdr(liste[i]);
+  
+  
+	// TODO: risolvere
+  return NULL;
+}
+
+
