@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+Mat* trasforma(Mat*m){
+  Mat*ris=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+   for(int j=0;j<m->cols;j++){
+     ris->mat[i][j]=m->mat[i][j]-i+j;
+   }
+  } 
+  return ris;
+}
+
+double trasforma_e_min_quad(Mat* m) {
+  double somma=0,min=100;
+  Mat*ris=trasforma(m);
+  for(int i=0;i<ris->rows/2;i++){
+    for(int j=0;j<ris->cols/2;j++){
+      if(ris->mat[i][j]<min) min=ris->mat[i][j];
+    }
+  }
+  somma+=min;
+  min=100;
+  for(int a=0;a<ris->rows/2;a++){
+    for(int b=ris->cols/2+1;b<ris->cols;b++){
+      if(ris->mat[a][b]<min) min=ris->mat[a][b];
+    }
+  }
+  somma+=min;
+  min=100;
+  for(int r=ris->rows/2+1;r<ris->rows;r++){
+    for(int s=0;s<ris->cols/2;s++){
+      if(ris->mat[r][s]<min) min=ris->mat[r][s];
+    }
+  }
+  somma+=min;
+  min=100;
+  for(int k=ris->rows/2+1;k<ris->rows;k++){
+    for(int h=ris->cols/2+1;h<ris->cols;h++){
+      if(ris->mat[k][h]<min) min=ris->mat[k][h];
+    }
+  }
+  somma+=min;
+  return somma;
+}
