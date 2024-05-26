@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+//2.1
+
+//questa funzione calcola il massimo prefisso decrescente
+int somma_prefisso(TipoLista l,int k){
+  if(estVuota(l)) return k;
+  if(estVuota(cdr(l))) return k+car(l);
+  if(car(l)>=car(cdr(l))){
+    k+=car(l);
+    return somma_prefisso(cdr(l),k);
+  }
+  k+=car(l);
+  return k;
+}
+
+//questa funzione somma i nodi successivi 
+int somma_succ(TipoLista l,int h){
+  if(estVuota(l) || estVuota(cdr(l))) return h;
+  h+=car(cdr(l));
+  return somma_succ(cdr(l),h);
+}
+
+//ho creato questa aux perchè prefisso deve essere fisoo, dunque lo importo come parametro
+TipoLista aux(TipoLista l,int prefisso) {
+  if(estVuota(l)) return listaVuota();
+  return cons(somma_succ(l,0)-prefisso,aux(cdr(l),prefisso));
+}
+  
+//funzione principale
+TipoLista successiviMenoPrefisso(TipoLista l) {
+  const int prefisso=somma_prefisso(l,0);
+  return aux(l,prefisso);
+  
+}
+
+
+//2.2
+
+//questa funzione calcola il valore massimo di una lista
+int max(TipoLista l,int maxi){
+  if(estVuota(l)) return maxi;
+  else if(car(l)>maxi){
+    maxi=car(l);
+    return max(cdr(l),maxi);
+  }
+  return max(cdr(l),maxi);
+}
+
+//funzione principale
+int* maxSuccessiviMenoPrefisso(TipoLista* liste, int n){
+  int*ris=(int*)malloc(sizeof(int));
+  for(int i=0;i<n;i++){
+    ris[i]=max(successiviMenoPrefisso(liste[i]),-100);
+  }
+  return ris;
+}
+
