@@ -1,0 +1,36 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+void contaNodiPerLivello(TipoAlbero a, int livello, int* nodiPerLivello) {
+    if (a == NULL) {
+        return;
+    }
+    nodiPerLivello[livello]++;
+  	printf("nodo: %d ",nodiPerLivello[livello]);
+    contaNodiPerLivello(a->sinistro, livello + 1, nodiPerLivello);
+    contaNodiPerLivello(a->destro, livello + 1, nodiPerLivello);
+}
+
+
+int max_albero(TipoAlbero a){
+  if(estVuoto(a)) return -1;
+  if(foglia(a)) return 1;
+  int max=0,liv;
+  int array[10]={0};
+  contaNodiPerLivello(a,0,array);
+  for(int i=0;i<10;i++){
+    if(array[i]>max){
+      max=array[i];
+      liv=i;
+    }
+  }
+  return liv;
+}
