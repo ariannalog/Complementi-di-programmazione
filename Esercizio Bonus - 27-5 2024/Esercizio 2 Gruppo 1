@@ -1,0 +1,27 @@
+#include "aux.h"
+
+
+TipoLista aux(TipoLista l,int n, T primo){
+  if(estVuota(l)) return listaVuota();
+  if(n==0) return cons(primo,aux(cdr(l),n-1,primo));
+  return cons(car(cdr(l)),aux(cdr(l),n-1,primo));
+  
+}
+
+TipoLista inFondo(TipoLista l) {
+  if(estVuota(l)) return listaVuota();
+  return aux(l,length(l)-1,car(l));
+}
+
+TipoLista aux2(TipoLista l, int inizio,int pos) {
+  if(estVuota(l)) return listaVuota();
+  if(pos<inizio) return cons(car(l),aux2(cdr(l),inizio,pos+1));
+    return cons(car(inFondo(l)),aux2(cdr(inFondo(l)),inizio,pos+1));
+  }
+    
+
+TipoLista invertiInParte(TipoLista l, int inizio) {
+  if(estVuota(l)) return listaVuota();
+  return aux2(l,inizio,0);
+
+}
