@@ -1,0 +1,24 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero a){
+  return (estVuoto(sinistro(a)) && estVuoto(destro(a)));
+}
+
+int prodotto_figli(TipoAlbero a){
+  if(estVuoto(a)) return 1;
+  if(estVuoto(sinistro(a)) && !estVuoto(destro(a))) return 1*radice(destro(a));
+  if(estVuoto(destro(a)) && !estVuoto(sinistro(a))) return 1*radice(sinistro(a));
+  else return radice(destro(a))*radice(sinistro(a));
+}
+
+TipoAlbero prodottoVicini(TipoAlbero a) {
+  if(estVuoto(a)) return albBinVuoto();
+  if(foglia(a)) return creaAlbBin(radice(a),albBinVuoto(),albBinVuoto());
+  else return creaAlbBin(radice(a)*prodotto_figli(a),prodottoVicini(sinistro(a)),prodottoVicini(destro(a)));
+}
+
