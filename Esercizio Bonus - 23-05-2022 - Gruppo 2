@@ -1,0 +1,32 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+
+void aux(TipoAlbero a,int livello,int*array){
+  if(estVuoto(a)) return;
+  array[livello]+=radice(a);
+  aux(a->sinistro,livello+1,array);
+  aux(a->destro,livello+1,array);
+}
+
+int crescente(TipoAlbero a) {
+  if(estVuoto(a)) return -1;
+  int array[10]={0};
+  bool esito=true;
+  int cord;
+  aux(a,0,array);
+  for(int i=0;i<10;i++){
+
+   if(array[i]<array[i-1] && array[i]!=0){
+     esito=false;
+     cord=i;
+     break;
+    }
+  }
+  if(esito==true) return -1;
+  else return cord;
+}
