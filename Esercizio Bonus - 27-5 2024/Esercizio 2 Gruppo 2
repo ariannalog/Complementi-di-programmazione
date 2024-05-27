@@ -1,0 +1,33 @@
+
+#include "aux.h"
+
+int leng(TipoLista l){
+  if(estVuota(l)) return 0;
+  else return 1+leng(cdr(l));
+}
+
+void aux(TipoLista l1,TipoLista l2,int* numero){
+  if(estVuota(l1) || estVuota(l2)) return;
+  if(car(l1)==car(l2)) *numero+=1;
+  aux(cdr(l1),cdr(l2),numero);
+}
+
+
+char confronta(TipoLista l1, TipoLista l2) {
+  int n=0;int*p=&n;
+  aux(l1,l2,p);
+  if(*p==leng(l1)) return 'u';
+  if(*p==0) return 't';
+  else return 'a';
+}
+
+TipoLista aux2(TipoLista liste1[], TipoLista liste2[], int n,int pos){
+  if(estVuota(liste1[pos]) || estVuota(liste2[pos]) || pos==n) return listaVuota();
+  if(pos<n) return cons(confronta(liste1[pos],liste2[pos]),aux2(liste1,liste2,n,pos+1));
+  return aux2(liste1,liste2,n,pos);
+}
+
+
+TipoLista lista_dei_confronti(TipoLista liste1[], TipoLista liste2[], int n) {
+  return aux2(liste1,liste2,n,0);
+}
