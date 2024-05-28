@@ -1,23 +1,45 @@
+***************************TRACCIA**************************
+Si scriva una funzione:
+
+int massimo_flip_colonna(Mat *m);
+che data in input una matrice di interi m di dimensione 2Nx2N, restituisca la somma massima del quadrante (sottomatrice) NxN 
+a partire dagli indici (0,0), (0,N), (N,0), (N,N) della matrice m2 ottenuta effettuando l'operazione “flip-colonna” (si veda definizione sotto) sulle colonne di indice dispari a partire da m.
+L'operazione “flip-colonna” è definita nel seguente modo: Data una colonna “i” composta dagli elementi (a1,a2,...,an)^T = i, flip-colonna(i) = (an, …, a2,a1)^T.
+Ad esempio la colonna (1, 2, 3, 4)^T dopo una flip-colonna diventa (4, 3, 2, 1)^T.
+Nota: in caso di quadrante 0x0 (quadrante matrice vuota) la somma risultante è 0 e se una colonna è composta da un solo elemento (oppure da nessun elemento), rimane invariata.
+
+ESEMPIO:
+m:
+0 1 0 0
+0 3 0 0
+0 0 0 0
+2 0 0 0
+
+La somma che ritorneremo è 6, proveniente dal quadrante 2x2: 
+0 3
+2 1
+dopo aver effettuato un flip-colonna della seconda colonna (indice 1). Output: 6
+
+**********************IMPLEMENTAZIONE***************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-
 #include "aux.h"
 
+//questa funzione restituisce una nuova matrice con le modifiche richieste;
 Mat* flippa(Mat *m){
-  Mat* flipped=mat_alloc(m->rows,m->cols);
-  int i=m->rows-1;
-  int j=m->cols-1;
+  Mat* flipped=mat_alloc(m->rows,m->cols); //alloco memoria per la nuova matrice da restituire;
   for(int k=0;k<flipped->rows;k++){
     for(int h=0;h<flipped->cols;h++){
-      	if(h%2!=0) flipped->mat[k][h]=m->mat[m->rows-k-1][h];
+      	if(h%2!=0) flipped->mat[k][h]=m->mat[m->rows-k-1][h]; //controllo se trattasi di una colonna di indice dispari
       	else flipped->mat[k][h]=m->mat[k][h];
     	}
 	}
  return flipped; 
 }
 
+//funzione principale
 int massimo_flip_colonna(Mat *m){
   Mat*flip=flippa(m);
   int somma=0;
