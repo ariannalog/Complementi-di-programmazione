@@ -1,9 +1,24 @@
+*************************TRACCIA*********************************
+Si scriva una funzione:
+double trasforma_e_min_quad(Mat* m);
+
+che data in input una matrice di interi m NxN,
+con N dispari, prima trasforma ogni elemento m[i][j] di m in m[i][j] - i + j,
+e successivamente ritorna la somma dei 4 elementi minimi tra gli elementi di ogni quadrante della matrice risultante.
+In questo caso, definiamo quadranti di una matrice, le 4 porzioni della matrice che sono delimitate dalla riga e colonna centrali della matrice (escluse). 
+La matrice di ingresso non deve essere modificata.
+
+************************IMPLEMENTAZIONE**************************
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 
 #include "aux.h"
+
+// QUESTA FUNZIONE AUSILIARIA EFFETTUA LA TRASFORMAZIONE;
 
 Mat* trasforma(Mat*m){
   Mat*ris=mat_alloc(m->rows,m->cols);
@@ -15,31 +30,34 @@ Mat* trasforma(Mat*m){
   return ris;
 }
 
+
+//FUNZIONE PRINCIPALE;
+
 double trasforma_e_min_quad(Mat* m) {
-  double somma=0,min=100;
-  Mat*ris=trasforma(m);
-  for(int i=0;i<ris->rows/2;i++){
+  double somma=0,min=100; //per trovare il minimo devo inizializzare tale variabile ad un numero molto grande (100 in questo caso riuslta sufficiente);
+  Mat*ris=trasforma(m);  //matrice su cui lavorare(ottenuta dalla trasformazione effettuata dalla funzione ausiliaria);
+  for(int i=0;i<ris->rows/2;i++){ //quadrante che parte da (0,0);
     for(int j=0;j<ris->cols/2;j++){
       if(ris->mat[i][j]<min) min=ris->mat[i][j];
     }
   }
   somma+=min;
   min=100;
-  for(int a=0;a<ris->rows/2;a++){
+  for(int a=0;a<ris->rows/2;a++){  //quadrante che parte da (0,N+1) (bisogna escludere riga e colonna centrali)
     for(int b=ris->cols/2+1;b<ris->cols;b++){
       if(ris->mat[a][b]<min) min=ris->mat[a][b];
     }
   }
   somma+=min;
   min=100;
-  for(int r=ris->rows/2+1;r<ris->rows;r++){
+  for(int r=ris->rows/2+1;r<ris->rows;r++){ //quadrante che parte da (N+1,0);
     for(int s=0;s<ris->cols/2;s++){
       if(ris->mat[r][s]<min) min=ris->mat[r][s];
     }
   }
   somma+=min;
   min=100;
-  for(int k=ris->rows/2+1;k<ris->rows;k++){
+  for(int k=ris->rows/2+1;k<ris->rows;k++){ //quadrante che parte da (N+1,N+1);
     for(int h=ris->cols/2+1;h<ris->cols;h++){
       if(ris->mat[k][h]<min) min=ris->mat[k][h];
     }
