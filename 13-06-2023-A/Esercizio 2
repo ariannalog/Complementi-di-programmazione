@@ -4,7 +4,7 @@
 2) È possibile definire funzioni ausiliarie. Negli esercizi in cui è richiesta una soluzione ricorsiva, tutte le funzioni ausiliarie usate devono essere ricorsive.
 3) Funzioni che non processano direttamente i dati, ovvero quelle O(1), ovviamente non saranno ricorsive (né iterative).
 4)Non è consentito usare variabili globali (comprese zone di memoria allocate dinamicamente) e altre strutture dati (es. array) non esplicitamente indicati nel testo dell’esercizio.
-
+ 
 *****************************TRACCIA*****************************
 Esercizio 2.1
 
