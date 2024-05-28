@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+
+double somma(TipoLista l){
+  if(estVuota(l)) return 0.0;
+  else return car(l)+somma(cdr(l));
+}
+
+TipoLista inverti(TipoLista l1,TipoLista l2){
+  if(estVuota(l1)) return l2;
+  l2=cons(car(l1),l2);
+  return inverti(cdr(l1),l2);
+}
+
+int somma_suffisso(TipoLista l,int k){
+  if(estVuota(l)) return k;
+  if(!estVuota(cdr(l)) && car(l)>=car(cdr(l))){
+    k+=car(l);
+    return somma_suffisso(cdr(l),k);
+  }
+  return k+car(l);
+}
+
+TipoLista aux(TipoLista l,int suff,int somma){
+  if(estVuota(l)) return listaVuota();
+  return cons(somma-suff,aux(cdr(l),suff,somma+car(l)));
+}
+
+TipoLista precedentiMenoSuffisso(TipoLista l) {
+  if(estVuota(l)) return listaVuota();
+  TipoLista inv=inverti(l,listaVuota());
+  int somma=somma_suffisso(inv,0);
+  return aux(l,somma,0);
+
+  
+}
+
+
+double* mediaPrecedentiMenoSuffisso(TipoLista* liste, int n){
+  double* ris=(double*)malloc(n*sizeof(double));
+  for(int i=0;i<n;i++){
+    printlist(precedentiMenoSuffisso(liste[i]));
+    ris[i]=somma(precedentiMenoSuffisso(liste[i]))/length(liste[i]);
+  }
+  return ris;
+}
+
