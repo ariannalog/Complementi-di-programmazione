@@ -1,3 +1,27 @@
+*******************************TRACCIA****************************
+Si scriva una funzione:
+int massimo_flip_riga(Mat *m);
+che data in input una matrice di interi m di dimensione 2Nx2N, restituisca la somma massima del quadrante (sottomatrice) NxN
+a partire dagli indici (0,0), (0,N), (N,0), (N,N) della matrice m2 ottenuta effettuando l'operazione “flip-riga” (si veda definizione sotto) sulle righe di indice pari a partire da m.
+L'operazione “flip-riga” è definita nel seguente modo: Data una riga “i” composta dagli elementi (a1, a2, ..., an) = i, flip-riga(i) = (an, …, a2, a1). 
+Ad esempio la riga (1, 2, 3, 4) dopo una flip-riga diventa (4, 3, 2, 1).
+Nota: in caso di quadrante 0x0 (quadrante matrice vuota) la somma risultante è 0, e se una riga è composta da un solo elemento (oppure da nessun elemento), rimane invariata.
+
+ESEMPIO:
+m:
+0 1 0 3
+0 3 0 0
+0 0 0 0
+0 0 0 0
+
+La somma che ritorneremo è 6, proveniente dal quadrante 2x2: 
+3 0
+0 3  
+dopo aver effettuato un flip-riga della prima riga.
+output: 6
+
+
+*********************************IMPLEMENTAZIONE**********************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -5,17 +29,19 @@
 
 #include "aux.h"
 
+//  QUESTA FUNZIONE RESTITUISCE UNA NUOVA MATRICE MODIFICATA COME SPECIFICATO;
+
 Mat* flipped_mat(Mat *m){
-  Mat *ris=mat_alloc(m->rows,m->cols);
+  Mat *ris=mat_alloc(m->rows,m->cols);   //alloco memoria per la matrice;
   for(int i=0;i<m->rows;i++){
-    if(i%2==0){
-      int col=m->cols-1;
+    if(i%2==0){       //l'operazione di flip va eseguita solo sulle righe pari;
+      int col=m->cols-1;   //posizione dell'ultimo elemento della riga;
     for(int j=0;j<m->cols;j++){
-      ris->mat[i][j]=m->mat[i][col];
-      col--;
+      ris->mat[i][j]=m->mat[i][col];   //tradotto è: il primo elemento della nuova matrice è l'ultimo di quella vecchia 
+      col--; 
     } 
   }
-  else{
+  else{ //se la riga è dispari, alora ricopio gli elementi;
     for(int j=0;j<m->cols;j++){
       ris->mat[i][j]=m->mat[i][j];
     	} 
@@ -24,10 +50,11 @@ Mat* flipped_mat(Mat *m){
   return ris;
 }
 
+
+//QUESTA FUNZIONE CALCOLA LA SOMMA MASSIMA TRA I 4 QUADRANTI; (avrei potuto inserirla nella funzione principale, è solo una scelta di modularozzare il codice e renderlo più leggibile);
 double somma_max(Mat *ris){
-  double somma=0;
-  double somma_max=0;
-  for(int i=0;i<ris->rows/2;i++){
+  double somma=0,somma_max=0;
+  for(int i=0;i<ris->rows/2;i++){ //quadrante che parte da (0,0);
       for(int j=0;j<ris->cols/2;j++){
         somma+=ris->mat[i][j];
     	}
@@ -35,7 +62,7 @@ double somma_max(Mat *ris){
   	if (somma>somma_max) somma_max=somma;
   	somma=0;
     
-  	for(int k=0;k<ris->rows/2;k++){
+  	for(int k=0;k<ris->rows/2;k++){ //qudrante che parte da (0,N);
       for(int h=ris->cols/2;h<ris->cols;h++){
         printf("%lf ",ris->mat[k][h]);
         somma+=ris->mat[k][h];
@@ -44,7 +71,7 @@ double somma_max(Mat *ris){
   	if (somma>somma_max) somma_max=somma;
   	somma=0;
   
-  	for(int r=ris->rows/2;r<ris->rows;r++){
+  	for(int r=ris->rows/2;r<ris->rows;r++){ //quadrante che parte da (N,0);
       for(int g=0;g<ris->cols/2;g++){
         somma+=ris->mat[r][g];
       	}
@@ -52,7 +79,7 @@ double somma_max(Mat *ris){
   	if (somma>somma_max) somma_max=somma;
   	somma=0;
   	
-  	for(int f=ris->rows/2;f<ris->rows;f++){
+  	for(int f=ris->rows/2;f<ris->rows;f++){ //quadrante che parte da (N,N);
       for(int y=ris->cols/2;y<ris->cols;y++){
         somma+=ris->mat[f][y];
       	}
@@ -62,7 +89,7 @@ double somma_max(Mat *ris){
   	return somma_max;
 }
 
-
+//FUNZIONE PRINCIPALE
 int massimo_flip_riga(Mat *m){
   	if(m->rows==0) return 0;
   	Mat*ris=flipped_mat(m);
