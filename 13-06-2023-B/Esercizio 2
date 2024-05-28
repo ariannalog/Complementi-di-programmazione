@@ -1,7 +1,32 @@
+****************************REGOLE***************************
+1) In entrambi gli esercizi è consentito accedere ai campi della struttura (next, info). Si può anche utilizzare l’interfaccia di lista fornita in aux.h.
+2) È possibile definire funzioni ausiliarie. Negli esercizi in cui è richiesta una soluzione ricorsiva, tutte le funzioni ausiliarie usate devono essere ricorsive.
+3) Funzioni che non processano direttamente i dati, ovvero quelle O(1), ovviamente non saranno ricorsive (né iterative).
+4) Non è consentito usare variabili globali (comprese zone di memoria allocate dinamicamente) e altre strutture dati (es. array) non esplicitamente indicati nel testo dell’esercizio.
+
+*************************TRACCIA****************************
+Esercizio 2.1
+Scrivere una funzione ricorsiva:
+TipoLista inserisciLista(TipoLista l1, TipoLista l2, int k);
+la quale riceve due liste di interi l1 ed l2 e un intero k minore o uguale alla lunghezza di l1. 
+La funzione deve ritornare una nuova lista che contiene nel seguente ordine:
+- i primi k elementi di l1 (nell'ordine in cui compaiono in l1)
+- tutti gli elementi di l2 (nell'ordine in cui compaiono in l2)
+- gli elementi rimanenti di l1 dopo i primi k (nell'ordine in cui compaiono in l1)
+NB: se la lista l1 è una lista vuota, dalla definizione sopra si ha che va ritornata una copia di l2.
+
+ESEMPIO:
+
+l1: [1, 4, 2, 3] 
+l2: [5, 2, 4, 1] 
+k: 3
+Output: [1, 4, 2,  5, 2, 4, 1,  3]
+Infatti, i primi k=3 elementi di l1 sono [1,4,2] e i rimanenti sono [3].
+
+*******************************IMPLEMENTAZIONE*******************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #include "aux.h"
 
 //aux che calcola la lunghezza 
@@ -31,7 +56,7 @@ TipoLista ultima_parte(TipoLista l,int k){
 }
 
 //questa funzione concatena la seconda e terza parte della lista risultante;
-TipoLista concatena(TipoLista l1,TipoLista l2,int k){   //k corrisponde alla lunghezza di l2. questo ci permette di capre quando fermarci
+TipoLista concatena(TipoLista l1,TipoLista l2,int k){   //k corrisponde alla lunghezza di l2. questo ci permette di capire quando fermarci;
   if(estVuota(l2)) return copy(l1);   // se la seconda parte è vuota, allora il risultato sarà composto solo dalla terza parte
   if(k>0) return cons(car(l2),concatena(l1,cdr(l2),k-1));  //fin quando k è positivo(dato che viene decrementato ricorsivamente), allora dobbiamo ancora arrivare alla fine della seconda parte, dunque dobbiamo aggiungere
   else return concatena(l1,cdr(l2),k);   //se k<0 allora dobbiamo solo scorrere la lista fino ad arrivare alla fine senza aggiungere niente;
@@ -47,8 +72,38 @@ TipoLista inserisciLista(TipoLista l1, TipoLista l2, int k) {
   	return finale;
 }
 
+*************************TRACCIA*****************************
+Esercizio 2.2
+Scrivere una funzione:
+TipoLista argmaxListeInserite(TipoLista* liste1, TipoLista* liste2, int n, int k);
+la quale riceve due array liste1 e liste2, ognuno contenente n liste di interi non negativi, e un intero k. 
+La funzione deve ritornare una nuova lista di lunghezza n, tale che l'elemento all'indice i sia:
+- 1, se il massimo valore tra gli elementi di liste1[i] è uguale al massimo valore della lista ottenuta come inserisciLista(liste1[i], liste2[i], k);
+- 0 altrimenti.
+NB:
+ -si assuma che tutte le liste in liste1 abbiano lunghezza maggiore o uguale a k
+ -se n=0, la funzione deve restituire una lista vuota
+ -se una lista in liste1 è vuota, si consideri 0 come suo valore massimo.
 
-//2.2
+ESEMPIO:
+liste1: [
+  [6, 7, 1, 4, 8, 8, 2],
+  [8, 8, 8],
+  [9, 9, 2]
+]
+liste2: [ 
+  [8, 9, 5, 1, 9, 2, 4],
+  [8, 5, 5, 1, 3, 8, 7, 2],
+  [7, 5, 3]
+]
+k: 1
+Output: [
+  0, (infatti, il massimo di liste1[0] è 8, mentre il massimo di inserisciLista(liste1[0], liste2[0], 1) è 9 )
+  1, (infatti, il massimo di liste1[1] è 8, uguale al massimo di inserisciLista(liste1[1], liste2[1], 1) )
+  1  (infatti, il massimo di liste1[2] è 9, uguale al massimo di inserisciLista(liste1[2], liste2[2], 1) )
+]
+
+*********************************IMPLEMENTAZIONE***********************************
 
 //questa funzione calcola il massimo di una lista
 int maxi(TipoLista l, int n){ //n sarebbe il massimo, inizialmente postov a 0 e aggiornato di volta in volta. Attraverso il passaggio di paramentro siamo sicuri di aggiornare sempre.
@@ -60,18 +115,18 @@ int maxi(TipoLista l, int n){ //n sarebbe il massimo, inizialmente postov a 0 e 
   else return maxi(cdr(l),n);
 }
 
-//FUNZIONE PRINCIPALE
 TipoLista argmaxListeInserite_aux(TipoLista* liste1, TipoLista* liste2, int n, int k,int pos){
   if(n==0) return listaVuota();
   if(pos<n){   //eseguo questo if fin quando arrivo alla fine dell'array di liste
-    int maxi1=maxi(liste1[pos],0);   //calcolo il primo massimo;
-    int maxi2=maxi(inserisciLista(liste1[pos],liste2[pos],k),0);   //calcolo il secondo massimo 
-    if(maxi1==maxi2) return cons(1,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos)); //se la condizione è verificata aggiungo 1 e chiamo ricorsivamente ricordandomi di decrementare la dimensione dell'array e incrementare la posizione
-       else return cons(0,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos)); //lo stesso ma aggiungendo 0
+    int maxi1=maxi(liste1[pos],0);      //calcolo il primo massimo;
+    int maxi2=maxi(inserisciLista(liste1[pos],liste2[pos],k),0);     //calcolo il secondo massimo 
+    if(maxi1==maxi2) return cons(1,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos));     //se la condizione è verificata aggiungo 1 e chiamo ricorsivamente ricordandomi di decrementare la dimensione dell'array e incrementare la posizione
+       else return cons(0,argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos));    //lo stesso ma aggiungendo 0
   }
   return argmaxListeInserite_aux(liste1+1,liste2+1,n-1,k,pos+1);
 }
 
+//FUNZIONE PRINCIPALE
 TipoLista argmaxListeInserite(TipoLista* liste1, TipoLista* liste2, int n, int k){
   return argmaxListeInserite_aux(liste1,liste2,n,k,0);
 }
