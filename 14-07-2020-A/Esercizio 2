@@ -1,0 +1,86 @@
+******************************TRACCIA*************************************
+
+Sia data una struttura collegata lineare di interi TipoSCL, definita come segue:
+
+typedef int TipoInfoSCL;
+struct NodoSCL {
+  TipoInfoSCL info;
+  struct NodoSCL * next;
+};
+typedef struct NodoSCL TipoNodo;
+typedef TipoNodo * TipoSCL;
+
+Esercizio 2.1
+Scrivere una funzione C RICORSIVA:
+
+int sommaElementi(TipoSCL lis, int i, int j);
+che, dati in input una SCL lis di interi positivi e due indici i e j, restituisca la somma 
+degli elementi di lis di indice i e j (il primo elemento della SCL ha indice 0).
+Si gestisca il caso in cui il puntatore lis è nullo, restituendo -1.
+Nel caso in cui uno o entrambi gli indici fossero maggiori della lunghezza della SCL, restituire -1.
+ESEMPIO:
+Data la seguente SCL in ingresso:
+lis = 1 -> 3 -> 8 -> 9 -> 7 -> 6 -> 9
+e gli indici
+	i = 2;
+	j = 4;
+la chiamata a sommaElementi(lis, i, j) restituirà il valore 15
+
+*********************IMPLEMENTAZIONE**********************
+#include "aux.h"
+
+//AUX CHE MISURA LA LUNGHEZZA DI UNA SCL
+int leng(TipoSCL l){
+  if(l==NULL) return 0;
+  else return 1+leng(l->next);
+}
+
+//AUX CHE RESTITUISCE L'ELEMENTO NELLA POSIZIONE I DELLA SCL
+int elem(TipoSCL lis,int i){
+  if(i==0) return lis->info;
+  return elem(lis->next,i-1);
+}
+
+//FUNZIONE PRINCIPALE
+int sommaElementi(TipoSCL lis, int i, int j){
+  if(lis==NULL || i>leng(lis) || j>leng(lis)) return -1;
+  return elem(lis,i)+elem(lis,j);
+}
+
+***************************TRACCIA************************
+
+Esercizio 2.2
+Scrivere una funzione C:
+void sommatoriaDispari(TipoSCL lis, TipoSCL ris);
+che, date in input due SCL di interi lis e ris aventi stessa dimensione, 
+inserisca in ris gli stessi elementi di lis rimpiazzandone quelli di indice dispari i con la somma
+di tutti gli elementi di lis aventi indice dispari j <= i.
+Il primo elemento di una SCL ha indice 0. Si consideri ris già allocata e di opportuna dimensione.
+
+ESEMPIO:
+Data la SCL
+	lis = 5 -> 6 -> 7 -> 1 -> 2 -> 3 -> 8 -> 9
+
+assumendo che ris sia una SCL qualsiasi di dimensione 8, dopo l'invocazione
+	sommatoriaDispari(lis,ris)
+si deve avere:
+	ris = 5 -> 6 -> 7 -> 7 -> 2 -> 10 -> 8 -> 19
+
+*************************IMPLEMENTAZIONE*****************************
+
+//AUX CHE TIENE CONTO DELLA SOMMA
+void aux(TipoSCL lis,TipoSCL ris,int pos,int somma){
+  if(lis==NULL) return;
+  if(pos%2!=0){
+    somma+=lis->info;
+    ris->info=somma;
+    return aux(lis->next,ris->next,pos+1,somma);
+  }
+  return aux(lis->next,ris->next,pos+1,somma);
+}
+
+//FUNZIONE PRINCIPALE
+void sommatoriaDispari(TipoSCL lis, TipoSCL ris){
+  if(lis==NULL) return;
+  return aux(lis,ris,0,0);
+}
