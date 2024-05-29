@@ -1,39 +1,58 @@
+*****************************TRACCIA***************************
+Implementare la funzione:
 
+int sinistroMenoDestro (TipoAlbero a)
+Che dato in ingresso un albero binario a, restituisce la differenza tra il massimo del sottoalbero sinistro della radice di a eil minimo
+del sottoalbero destro della radice di a.
+NB: Se a è vuoto, ritornare 0. (considerare nel calcolo del max e min solo i valori dei nodi, non dei sottoalberi nulli. 
+Assumere sempre che se a non è vuoto, allora la sua radice avrà almeno un nodo nel sottoalbero destro e uno nel sottoalbero sinistro).
+
+ESEMPIO:
+Dato l'albero:
+
+      3 		
+    /   \
+   3      3	
+  / \      \ 
+ 1   1      3		
+/
+8
+
+Il valore ritornato sarà 5 perché il massimo del sottoalbero sinistro è 8 ed il minimo del sottoalbero destro è 3, per cui 8-3=5.
+   
+
+************************IMPLEMENTAZIONE******************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #include "aux.h"
 
-int max_nodo(TipoAlbero a){
-  if(estVuoto(a)) return 0;
-  int s=max_nodo(sinistro(a));
-  int d=max_nodo(destro(a));
-  if(s>=d){
-    if(s>radice(a)) return s;
-    else return radice(a);
-  }
-  if(d>radice(a)) return d;
-  else return radice(a);
+//QUESTA FUNZIONE CALCOLA IL MASSIMO DI UN ALBERO
+int max(TipoAlbero a,int maxi){
+  if(estVuoto(a)) return maxi;
+  if(radice(a)>maxi) maxi=radice(a);
+  int s=max(sinistro(a),maxi);
+  int d=max(destro(a),maxi);
+  if(s>=d && s>radice(a)) maxi=s;
+  else if(d>radice(a)) maxi=d;
+  return maxi;
 } 
 
-int min_nodo(TipoAlbero a){
-  if(estVuoto(a)) return 104;
-  int s=min_nodo(sinistro(a));
-  int d=min_nodo(destro(a));
-  if(s<=d){
-    if(s<radice(a)) return s;
-    else return radice(a);
-  }
-  if(d<radice(a)) return d;
-  else return radice(a);
-} 
-
-int sinistroMenoDestro(TipoAlbero a) {
-  if(estVuoto(a)) return 0;
-  printf("%d ",max_nodo(sinistro(a)));
-  printf("%d ",min_nodo(destro(a)));
-  return max_nodo(sinistro(a))-min_nodo(destro(a));
-
+//QUESTA FUNZIONE CALCOLA IL MINIMO DI UN ALBERO 
+int min(TipoAlbero a,int mini){
+  if(estVuoto(a)) return mini;
+  if(radice(a)<mini) mini=radice(a);
+  int s=min(sinistro(a),mini);
+  int d=min(destro(a),mini);
+  if(s<d && s<radice(a)) mini=s;
+  else if(s>d && d<radice(a)) mini=d;
+  return mini;
 }
 
+//FUNZIONE PRINCIPALE
+int sinistroMenoDestro(TipoAlbero a) {
+  if(estVuoto(a)) return 0;
+  int s=max(sinistro(a),-100);
+  int d=min(destro(a),100);
+  return s-d;
+}
