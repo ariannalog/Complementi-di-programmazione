@@ -39,7 +39,7 @@ output: [6,15,24,10]
 
 TipoLista aux(TipoLista l,int k,int fisso,int s){
   if(estVuota(l)) return listaVuota();
-  if(estVuota(cdr(l)) && k!=0) return cons(s+car(l),aux(cdr(l),k,fisso,s)); // SE SONO ARRIVATA ALLA FINE MA NON RIESCO A PRENDERE ESATTAMENTE K ELEMENTI MI FERMO PRIMA O SE SONO IN MEZZO 
+  if(estVuota(cdr(l)) && k!=0) return cons(s+car(l),aux(cdr(l),k,fisso,s)); // SE SONO ARRIVATA ALLA FINE MA NON RIESCO A PRENDERE ESATTAMENTE K ELEMENTI MI FERMO PRIMA  
   if(k==0) return cons(s,aux(l,fisso,fisso,0)); //SE ARRIVO A ZERO RESETTO IL CONTATORE
   return aux(cdr(l),k-1,fisso,s+car(l));
 }
