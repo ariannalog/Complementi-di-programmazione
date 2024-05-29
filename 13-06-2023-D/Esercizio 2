@@ -1,7 +1,26 @@
+*************************TRACCIA*******************************
+Scrivere una funzione ricorsiva:
+
+TipoLista porzioneDiListe(TipoLista l1, TipoLista l2, int k);
+la quale riceve due liste di interi l1 ed l2, entrambe di lunghezza maggiore o uguale a k.
+La funzione deve ritornare una nuova lista che contiene nel seguente ordine:
+i primi k elementi di l1 (nell'ordine in cui compaiono in l1)
+gli ultimi k elementi di l2 (nell'ordine in cui compaiono in l2)
+
+NB: Se k è 0, ritornare una lista vuota.
+
+Esempio 1
+l1: [1, 4, 2, 3] 
+l2: [5, 2, 4, 1]
+k: 3
+Output: [1, 4, 2, 2, 4, 1]
+
+Infatti, i primi k=3 elementi di l1 sono [1,4,2] e gli ultimi k=3 elementi di l2 sono [2, 4, 1].
+
+************************IMPLEMENTAZIONE************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
 #include "aux.h"
 
 long int somma(TipoLista l){
