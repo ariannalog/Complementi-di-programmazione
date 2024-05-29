@@ -1,12 +1,34 @@
+***************************************TRACCIA*************************************
+Si scriva una funzione:
+
+Mat* prima_gli_unici(Mat *m);
+che prende in input una matrice di interi m di dimensione NxM, con elementi compresi nell'intervallo [0, N*M]. 
+La funzione restituisce una copia della matrice m, in cui gli elementi che si ripetono più di una volta vengono sostituiti come segue:
+se la prima occorrenza dell'elemento è già presente nella matrice in una riga di indice pari, viene sostituito con -2, altrimenti con -1.
+È importante mantenere l'elemento che appare per primo nella matrice, sia in ordine di riga che (in caso di stessa riga) di colonna.
+Ad esempio, se abbiamo l'elemento x in posizione (i, j) e anche in posizione (i, k), (l,j) con k > j e l > i,
+gli elementi in posizione (i, k) e (l, j) devono essere sostituiti come descritto.
+Esempio1
+m:
+0 1
+1 1
+
+output m2:
+0  1
+-2 -2
+
+*****************************************IMPLEMENTAZIONE***************************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
 #include "aux.h"
 
-char est_presente_pari_o_dispari(Mat*m,int k,int row,int col){ //questa funzione controlla se un elemento è presente nella matrice in una QUALASIASI posizione PRECEDENTE alla sua;
+//questa funzione controlla se un elemento è presente nella matrice in una QUALASIASI posizione PRECEDENTE alla sua;
+
+char est_presente_pari_o_dispari(Mat*m,int k,int row,int col){ 
   for(int i=0;i<=row;i++){ 
-    if(i!=row){          		//mi trovo su una riga diversa da quella in cui si trova l'elemento di cui voglio controllare la presenza (questo mi permette di scorrere TUTTE LE COLONNE DELLA MATRICE di quella riga);              
+    if(i!=row){   //mi trovo su una riga diversa da quella in cui si trova l'elemento di cui voglio controllare la presenza (questo mi permette di scorrere TUTTE LE COLONNE DELLA MATRICE di quella riga);              
     for(int j=0;j<m->cols;j++){  
       if(m->mat[i][j]==k){
         if(i%2==0) return 'p'; //restituisce 'p' se è presente in una riga pari,
@@ -26,7 +48,7 @@ char est_presente_pari_o_dispari(Mat*m,int k,int row,int col){ //questa funzione
  return 'n'; //restituisce 'n' se l'elemento non è presente in una posizione precedente;
 }
 
-
+//FUNZIONE PRINCIPALE
 
 Mat * prima_gli_unici(Mat *m){
 Mat* ris=mat_alloc(m->rows,m->cols); //crea una matrice delle stesse dimensioni di quella di partenza
