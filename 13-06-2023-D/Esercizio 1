@@ -1,0 +1,71 @@
+*****************************TRACCIA*************************************
+Si scriva una funzione:
+Mat* ultimi_gli_unici(Mat *m);
+che prende in input una matrice di interi m di dimensione NxM, con elementi compresi nell'intervallo [0, N*M]. 
+La funzione restituisce una copia della matrice m, in cui gli elementi che si ripetono più di una volta vengono sostituiti come segue: 
+se l'ultima occorrenza dell'elemento è già presente nella matrice in una riga di indice pari, viene sostituito con -1, altrimenti con -2.
+È importante mantenere l'elemento che appare per ultimo nella matrice, sia in ordine di riga che (in caso di stessa riga) di colonna.
+Ad esempio, se abbiamo l'elemento x in posizione (i, j) e anche in posizione (i, k), (l,j) con k < j e l < i, gli elementi in posizione (i, k) e (l, j)
+devono essere sostituiti come descritto.
+ESEMPIO 1:
+m:
+1 1 
+0 1
+   
+output m2:
+-2 -2
+ 0  1
+    
+ESEMPIO 2:
+m:
+0 1
+2 3
+    
+output m2:
+0 1
+2 3
+
+************************IMPLEMENTAZIONE**********************
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "aux.h"
+
+//QUESTA FUNZIONE CONTROLLA LA PRESENZA DI UN ELEMENTO A PARTIRE DALLA FINE DELLA MATRICE. IN CASO POSITIVO, RESTITUISCE P SE E' IN UNA RIGA PARI, DISPARI ALTRIMENTI. 
+char where_is(Mat*m,int elem,int row,int col){
+  int h=m->rows-1;
+  while(h>=row){
+    int k=m->cols-1;
+    if(h==row){
+      while(k>col){
+        if(m->mat[h][k]==elem && h%2==0) return 'p';
+        else if(m->mat[h][k]==elem && h%2!=0) return 'd';
+        k--;
+      }
+    }
+    else{
+     while(k>=0){
+       if(m->mat[h][k]==elem && h%2==0) return 'p';
+       else if(m->mat[h][k]==elem && h%2!=0) return 'd';
+       k--;
+     }
+    }
+     h--; 
+    }
+  return 'n'; //IN CASO NEGATIVO (NON PRESENTE) RESTITUISCE 'n'.
+  }
+
+
+Mat * ultimi_gli_unici(Mat *m){
+  Mat*ris=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+    for(int j=0;j<m->cols;j++){
+      char esito=where_is(m,m->mat[i][j],i,j);
+      if(esito=='p') ris->mat[i][j]=-1;
+      else if(esito=='d') ris->mat[i][j]=-2;
+      else ris->mat[i][j]=m->mat[i][j];
+    }
+  }
+  return ris;
+}
