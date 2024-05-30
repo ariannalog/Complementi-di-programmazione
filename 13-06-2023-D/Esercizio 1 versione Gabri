@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "aux.h"
+
+Mat*copy(Mat*m){
+  Mat*copia=mat_alloc(m->rows,m->cols);
+  for(int i=0;i<m->rows;i++){
+    for(int j=0;j<m->cols;j++){
+      copia->mat[i][j]=m->mat[i][j];
+    }
+  }
+  return copia;
+}
+
+
+Mat* modifica(Mat*m,int elem,int riga){
+  bool stato=false;
+  for(int i=riga;i>=0;i--){
+    for(int j=m->cols-1;j>=0;j--){
+      if(m->mat[i][j]==elem && stato==false) stato=true; //abbiamo trovato la prima ripetizione
+      else if(m->mat[i][j]==elem && stato==true){
+        if(riga%2==0) m->mat[i][j]=-1;
+        else m->mat[i][j]=-2;
+      }
+    }
+  }
+  return m;
+}
+
+
+Mat * ultimi_gli_unici(Mat *m){
+  Mat*ris=copy(m);
+  for(int i=m->rows-1;i>=0;--i){
+    for(int j=m->cols-1;j>=0;--j){
+      if(ris->mat[i][j]!=-2 && ris->mat[i][j]!=-1) ris=modifica(ris,ris->mat[i][j],i);
+    }
+  }
+  return ris;
+}
