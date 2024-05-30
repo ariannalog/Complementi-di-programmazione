@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+TipoLista po(TipoLista l1, TipoLista l2, int k, int kk, int z ) {
+    if (estVuota(l1)||estVuota(l2) || k==0) return NULL;
+	if(kk>0) return cons(car(l1),po(cdr(l1),l2,k,kk-1,z));
+  	else if (z<=k) return cons(car(l2),po(l1,cdr(l2),k,kk,z-1));
+  	return po(l1,cdr(l2),k,kk,z-1);                                               
+}
+
+
+TipoLista porzioneDiListe(TipoLista l1, TipoLista l2, int k) {
+  if (estVuota(l1)||estVuota(l2)) return NULL;
+  return po(l1,l2,k,k,length(l2));
+}
+
+
+TipoLista diffPorzioniDiListe(TipoLista* liste1, TipoLista* liste2, int n, int k) {
+  	if(n==0) return NULL;
+  TipoLista ris = listaVuota();
+	for(int i=n-1;i>=0;i--){
+    	TipoLista temp=porzioneDiListe(liste1[i],liste2[i],k);
+      	int k2=2*k,sprimi=0,sdopo=0;
+      	while(k2!=0){
+        	if(k2>k){
+              sprimi+=car(temp);
+            }
+          	else{
+            	sdopo+=car(temp);
+            }
+          temp=cdr(temp);
+          k2--;
+        }
+      sprimi=sprimi-sdopo;
+      ris=cons(sprimi,ris);
+    }
+  return ris;
+}
