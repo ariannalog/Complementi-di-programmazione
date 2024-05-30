@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+
+#include "aux.h"
+
+int somma(Mat*m){
+  int sum=0;
+  for(int i=0; i<m->rows ;i++){
+    for(int j=0; j<m->cols ;j++){
+      sum+=m->mat[i][j];
+    }
+  }
+  return sum;
+}
+
+Mat* applicaFiltro(Mat *src, const Mat *filtro){
+  Mat*ris=mat_alloc(filtro->rows,filtro->cols);
+  for(int i=0; i<src->rows-1 ;i++){
+    for(int j=0; j<src->cols-1 ;j++){
+      for(int a=0;a<filtro->rows;a++){
+        for(int b=0;b<filtro->cols;b++){
+          ris->mat[a][b]=filtro->mat[a][b]*src->mat[a+i][b+j];
+        }
+      }
+      if(somma(ris)>0) return ris;
+    }
+  }
+return NULL;
+}
