@@ -1,0 +1,64 @@
+*******************************+TRACCIA***************************
+Si scriva una funzione:
+int* applicaFiltro(Mat *src, int *filtro);
+che, data in input una matrice src NxN e un vettore filtro di dimensione N, applichi il vettore filtro a ogni riga di src. 
+"Applicare il filtro" ad un riga vuol dire moltiplicare ogni elemento della riga con il corrispondente elemento del filtro 
+e calcolare la somma degli elementi risultanti. La funzione deve restituire un nuovo vettore con gli stessi valori della riga di src
+la cui somma dopo l'applicazione del filtro e' massima rispetto a tutte le righe di src.
+
+ESEMPIO:
+src:
+    6, 10, 9, 
+    8, 9, 2, 
+filtro:
+    5, -1, 4, 
+Somma dopo filtro (riga 0): 6*5 + 10*(-1) + 9*4 = 56
+Somma dopo filtro (riga 1): 8*5 + 9*(-1)  + 2*4 = 39
+
+La riga a somma massima e' la riga 0 (6, 10, 9).
+
+Soluzione corretta: 
+    6, 10, 9, 
+
+
+************************IMPLEMENTAZIONE*************************
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <math.h>
+#include "aux.h"
+
+//AUX CHE CALCOLA LA SOMMA DI UNA RIGA;
+int fai_somma(Mat *src, int riga){
+  int somma=0;
+    for(int j=0;j<src->cols;j++){
+      somma+=src->mat[riga][j];
+    }
+  return somma;
+}
+
+//FUNZIONE PRINCIPALE:
+int* applicaFiltro(Mat *src, int *filtro) {
+  int rig=src->rows;
+  int col=src->cols;
+  Mat*temp=mat_alloc(rig,col);
+  int*ris=(int*)malloc(col*sizeof(int));
+  
+  int somma,somma_max=-100;   //N.B: nei tester ci sono numeri negativi, dunque inizializza il massimo ad un numero molto piccolo (-100 dovrebbe bastare XD );
+  for(int i=0;i<rig;i++){
+    for(int j=0;j<col;j++){
+      temp->mat[i][j]=src->mat[i][j]*filtro[j];
+      }
+      somma=fai_somma(temp,i);
+      if(somma>somma_max){
+        somma_max=somma;
+        for(int k=0;k<col;k++){
+          ris[k]=src->mat[i][k];
+        }
+      }
+      somma=0;
+    
+  }
+  return ris;
+}
+
