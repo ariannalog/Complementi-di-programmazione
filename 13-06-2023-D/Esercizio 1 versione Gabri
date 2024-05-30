@@ -34,7 +34,7 @@ Mat * ultimi_gli_unici(Mat *m){
   Mat*ris=copy(m);
   for(int i=m->rows-1;i>=0;--i){
     for(int j=m->cols-1;j>=0;--j){
-      if(ris->mat[i][j]!=-2 && ris->mat[i][j]!=-1) ris=modifica(ris,ris->mat[i][j],i);
+      if(ris->mat[i][j]>=0) ris=modifica(ris,ris->mat[i][j],i);
     }
   }
   return ris;
