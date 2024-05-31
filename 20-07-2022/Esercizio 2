@@ -21,48 +21,33 @@ int posizioni_alternanza(TipoLista l) {
 
 ///2.2///
 
-//aux che calcola la lunghezza
-int leng(TipoLista l){ 
-  if(estVuota(l)) return 0;
-  else return 1+leng(cdr(l));
+TipoLista resto(TipoLista l,int pos_alt){
+  if(estVuota(l)) return listaVuota();
+  if(pos_alt<=0) return cons(car(l),resto(cdr(l),pos_alt-1));
+  return resto(cdr(l),pos_alt-1);                                   
 }
 
 
-TipoLista noprefisso(TipoLista l,int k){ //questa funzione crea una lista, a partire da quella data in input, rimuovendone il prefisso;
-  if(estVuota(l)) return listaVuota(); //k è la lunghezza del prefisso da non considerare;
-  if(k>0) return noprefisso(cdr(l),k-1);
-  return cons(car(l),noprefisso(cdr(l),k-1));
-  }
-
-char* copiadalista(TipoLista l,int k){ //questa funzione copia una lista (i suoi elementi info) in una stringa;
-  if(estVuota(l) || k==0 ){ //k è pari alla lunghezza della lista l-la lunghezza del prefisso da non considerare;
-    char* ris=(char*)malloc(1*sizeof(char)); //se k è pari a 0, allora devo restituire una stringa vuota;
-    ris[0]='\0'; //ovvero con il solo carattere '\0'
-    return ris;
-    }
-  int i=0; 
-  char* str=(char*)malloc(k*sizeof(char)); //altrimenti creo una stringa di dimensioni proporzionali a k;
-  while(!estVuota(l)){ 
-    str[i]=car(l); //aggiungo il car(l) alla stringa;
-    i++; //incremento le posizioni;
-    l=cdr(l); //scorro la lista;
-  }
- str[k]='\0'; //aggiungo il terminatore alla lista
- return str;
-}
-
+//funzione principale
 char * prefisso_alternante(TipoLista *liste, int n) {
-  	int indice_max=0;
- 	int max_pre=0;
-	for(int i=0;i<n;i++){ //questo for rintraccia la lista con il prefisso più lungo 
-      int alt=posizioni_alternanza(liste[i]);
-      if(alt>max_pre){
-        max_pre=alt; //max_pre è la lunghezza del massimo prefisso
-      	indice_max=i; //indice_max è la posizione della "lista prescelta" nell'arry di liste
-      } 
+  int leng_max=0,riga,len;
+  for(int i=0;i<n;i++){
+    int prefisso=posizioni_alternanza(liste[i]);
+    if (prefisso>leng_max){
+      riga=i;
+      leng_max=prefisso;
     }
-  	int dim_rest=leng(liste[indice_max])- max_pre; //lunghezza della lista senza prefisso (e anche della stringa);
-  	TipoLista ris=noprefisso(liste[indice_max],max_pre);
-  	return copiadalista(ris,dim_rest+1);
+  }
+    TipoLista restante=resto(liste[riga],leng_max);
+    len=leng(restante);
+    char* ris=(char*)malloc(len*sizeof(char));
+    for(int j=0;j<len;j++){
+      ris[j]=car(restante);
+      restante=cdr(restante);
     }
+    ris[len]='\0';
+  return ris;
+ 
+}
+
 
