@@ -1,0 +1,25 @@
+
+#include "aux.h"
+
+TipoLista append_almeno_5(TipoLista list, T elem) {
+  if(estVuota(list) && elem>=5) return cons(elem,list);
+  if(estVuota(list) && elem<5) return listaVuota();
+  return cons(car(list),append_almeno_5(cdr(list),elem));
+}
+
+TipoLista inverti(TipoLista l,TipoLista b){
+  if(estVuota(l)) return b;
+  b=cons(car(l),b);
+  return inverti(cdr(l),b);
+}
+
+TipoLista aux(TipoLista list) {
+  if(estVuota(list)) return listaVuota();
+  if(car(list)>=5) return cons(car(list),aux(cdr(list)));
+  return aux(cdr(list));
+
+}
+TipoLista inverti_numeri_alti(TipoLista list) {
+  return inverti(aux(list),listaVuota());
+}
+
