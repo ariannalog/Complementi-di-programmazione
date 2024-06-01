@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+int leng(TipoLista l){
+  if(estVuota(l)) return 0;
+  return 1+leng(cdr(l));
+}
+
+TipoLista iniziali(TipoLista list, int k) {
+  if(estVuota(list)) return listaVuota();
+  if(k>=leng(list)) return cons(car(list),iniziali(cdr(list),k));
+  if(k>0) return cons(car(list),iniziali(cdr(list),k-1));
+  return iniziali(cdr(list),k);
+}
+
+TipoLista* aux(TipoLista list,int k){
+  TipoLista*ris=(TipoLista*)malloc(leng(list)*sizeof(TipoLista));
+  for(int i=0;i<leng(list);i++){
+    ris[i]=iniziali(list,i+1);
+  }
+  return ris;
+}
+
+TipoLista * liste_iniziali(TipoLista list) {
+  return aux(list,0);
+}
