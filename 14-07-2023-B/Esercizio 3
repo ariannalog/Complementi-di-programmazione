@@ -1,0 +1,41 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+//questa aux conta il numero di nodi dispari di un qualsiasi albero (in seguito verrà utilizzata per i sottoalberi)
+int conta_dispari(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  if(radice(a)%2!=0) return 1+conta_dispari(sinistro(a))+conta_dispari(destro(a));
+  return conta_dispari(sinistro(a))+conta_dispari(destro(a));
+}
+
+//questa aux trova il massimo valore di un qualsiasi albero (in seguito verrà utilizzata per i sottoalberi)
+int maxi(TipoAlbero a,int max){
+  if(estVuoto(a)) return max;
+  if(radice(a)>max) max=radice(a);
+  int s=maxi(sinistro(a),max);
+  int d=maxi(destro(a),max);
+  return s>d? s:d;
+}
+
+//questa aux trova il minimo valore di un qualsiasi albero (in seguito verrà utilizzata per i sottoalberi)
+int mini(TipoAlbero a,int min){
+  if(estVuoto(a)) return min;
+  if(radice(a)<min) min=radice(a);
+  int s=mini(sinistro(a),min);
+  int d=mini(destro(a),min);
+  return s<d? s:d;
+}
+
+//FUNZIONE PRINCIPALE
+void diffSommaMinMaxDispari(TipoAlbero a) {
+  if(estVuoto(a)) return;
+  if(conta_dispari(sinistro(a))>=conta_dispari(destro(a))) a->info=maxi(sinistro(a),-100)+mini(sinistro(a),100)-maxi(destro(a),-100)-mini(destro(a),100); 
+  else a->info=maxi(destro(a),-100)+mini(destro(a),100)-maxi(sinistro(a),-100)-mini(sinistro(a),100);
+  diffSommaMinMaxDispari(a->sinistro);
+  diffSommaMinMaxDispari(a->destro);
+}
+
