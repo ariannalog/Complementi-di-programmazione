@@ -1,0 +1,21 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+
+void taglia_livello(TipoAlbero *a, int livello) {
+  if(*a==NULL || livello<=0) return;
+  if(livello==1 &&  (*a)->destro!=NULL && (*a)->destro->destro==NULL && (*a)->destro->sinistro==NULL){
+    (*a)->info+=(*a)->destro->info;
+    (*a)->destro=NULL;
+  }
+  if(livello==1 && (*a)->sinistro!=NULL && (*a)->sinistro->destro==NULL && (*a)->sinistro->sinistro==NULL){
+    (*a)->info+=(*a)->sinistro->info;
+    (*a)->sinistro=NULL;
+  }
+  taglia_livello(&((*a)->sinistro),livello-1);
+  taglia_livello(&((*a)->destro),livello-1);
+}
