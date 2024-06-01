@@ -1,0 +1,36 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+int somma_succ(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  return radice(a)+somma_succ(sinistro(a))+somma_succ(destro(a));
+}
+
+bool foglia(TipoAlbero a){
+  return(estVuoto(destro(a)) && estVuoto(sinistro(a)));
+}
+
+int max(int a,int b){
+ return a>b? a:b;
+}
+
+void aux(TipoAlbero a,int somma,int somma_prox){
+  if(estVuoto(a)) return;
+  somma=somma_prox;
+  somma_prox+=radice(a);
+  if(somma<max(somma_succ(sinistro(a)),somma_succ(destro(a)))) a->info=1; 
+  else a->info=0;
+  aux(sinistro(a),somma,somma_prox);
+  aux(destro(a),somma,somma_prox);
+}
+
+void confronto_antenati_successori(TipoAlbero a) {
+  if(estVuoto(a)) return;
+  return aux(a,0,0);
+
+}
+
