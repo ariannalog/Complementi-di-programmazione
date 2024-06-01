@@ -1,0 +1,27 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "aux.h"
+
+int conta_nodi(TipoAlbero a){
+  if(estVuoto(a)) return 0;
+  return 1+conta_nodi(sinistro(a))+conta_nodi(destro(a));
+}
+
+
+void aux(TipoAlbero a,int max,int max_prox){
+  if(estVuoto(a)) return;
+  max=max_prox;
+  if(radice(a)>max_prox) max_prox=radice(a);
+  if(max%2==0) a->info=conta_nodi(destro(a));
+  else a->info=conta_nodi(sinistro(a));
+  aux(sinistro(a),max,max_prox);
+  aux(destro(a),max,max_prox);
+}
+
+
+void scegli_discendenti(TipoAlbero a) {
+	return aux(a,0,0);
+}
+
