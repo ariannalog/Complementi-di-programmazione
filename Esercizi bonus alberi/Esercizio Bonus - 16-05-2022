@@ -1,0 +1,24 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "aux.h"
+
+bool foglia(TipoAlbero *a){
+  return ((*a)->sinistro==NULL && (*a)->destro==NULL);
+}
+
+void taglia_foglie(TipoAlbero *a) {
+  if(*a==NULL) return;
+  taglia_foglie(&((*a)->sinistro));
+  taglia_foglie(&((*a)->destro));
+  if((*a)->sinistro==NULL && (*a)->destro!=NULL && (*a)->destro->destro==NULL && (*a)->destro->sinistro==NULL){
+    (*a)->info+=((*a)->destro)->info;
+    (*a)->destro=NULL;
+  }
+  if((*a)->sinistro!=NULL && (*a)->destro==NULL && (*a)->sinistro->sinistro==NULL && (*a)->sinistro->destro==NULL){
+    (*a)->info+=((*a)->sinistro)->info;
+    (*a)->sinistro=NULL;
+  }
+}
