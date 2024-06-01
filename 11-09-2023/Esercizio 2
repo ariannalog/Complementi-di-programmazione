@@ -42,17 +42,15 @@ output: [3, 10, 8, 9]
 #include <stdbool.h>
 #include "aux.h"
 
-//CREO UNA FUNZIONE AUSILIARIA CHE HA COME PARAMETRO IL PRIMO ELEMENTO DELLA LISTA; QUESTO MI E' UTILE QUANDO HO UNA LISTA DISPARI E DEVO SOMMARE L'ULTIMO ELEMENTO CON IL PRIMO; 
-TipoLista somme_aux(TipoLista l, T i){
+TipoLista aux(TipoLista l, T primo){
   if(estVuota(l)) return listaVuota();
-  if(!estVuota(cdr(l))) return cons(car(l)+car(cdr(l)),somme_aux(cdr(cdr(l)),i));
-  else return cons(car(l)+i,somme_aux(cdr(l),i));  //caso in cui cdr(l) è vuoto (dunque sono sull,ultimo elemento) e sommo l'ultimo con il primo. 
-	}
+  if(!estVuota(cdr(l))) return cons(car(l)+car(cdr(l)),aux(cdr(cdr(l)),primo));
+  return cons(car(l)+primo,aux(cdr(l),primo));
+}
 
 TipoLista sommeDueADue(TipoLista l) {
-   if(estVuota(l)) return listaVuota();
-   if(estVuota(cdr(l))) return cons(2*car(l),sommeDueADue(cdr(l))); //se la lista è formata da un solo elemento, allora il risultato sarà il suo doppio.
-   return somme_aux(l,car(l)); 
+  if(estVuota(l)) return listaVuota();
+  return aux(l,car(l));
 }
 
 **************************TRACCIA*******************************
@@ -81,7 +79,7 @@ output: [0.0, 7.5, 7.6]
 double* mediaSommeDueADue(TipoLista* liste, int n){
  double* ris=(double*)malloc(n*sizeof(double)); //alloco memoria per l'array di lunghezza n;
   	for(int i=0;i<n;i++){
-     ris[i]=(double)sommaLista(sommeDueADue(liste[i]))/(double)length(sommeDueADue(liste[i]));  //l'aux disponeva già della funzione sommaLista;
+     ris[i]=(double)sommaLista(sommeDueADue(liste[i]))/(double)length(sommeDueADue(liste[i]));  //l'aux disponeva già della funzione sommaLista e length;
     }
  return ris;
 }
