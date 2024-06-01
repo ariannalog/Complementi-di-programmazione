@@ -1,24 +1,60 @@
+******************************REGOLE***********************************
+1) Nell'esercizio 2.1, non usare gli array
+2) In entrambi 2.1 e 2.2, accedere alla struttura solo tramite l'interfaccia della lista fornita (ad esempio, non è consentito accedere a next e info). I metodi dell'interfaccia lista validi sono tutti quelli presenti nel file aux.h.
 
+****************************TRACCIA********************************
+2.1
+Si implementi la funzione ricorsiva:
+TipoLista ruota(TipoLista l);
+che, data in input una lista l, restituisca una nuova lista contentente gli stessi elementi di l, in cui ogni elemento è spostato di una posizione a sinistra.
+Inoltre, il primo elemento di l deve trovarsi in ultima posizione.
+Quest'operazione si chiama "rotazione sinistra".
+
+ESEMPI: 
+l: []                return: []
+l: [0, 1]            return: [1, 0]
+l: [0, 1, 2, 3, 4]   return: [1, 2, 3, 4, 0]
+
+**********************IMPLEMENTAZIONE**************************
 #include "aux.h"
 
+TipoLista aux(TipoLista l,int primo) {
+  if(estVuota(l)) return cons(primo,listaVuota());
+  if(!estVuota(cdr(l))) return cons(car(cdr(l)),aux(cdr(l),primo));
+  return aux(cdr(l),primo);
+}
 
-TipoLista copia(TipoLista l){
+//funzione principale
+TipoLista ruota(TipoLista l) {
+  if(estVuota(l)) return listaVuota();
+  int primo=car(l);
+  return aux(l,primo);
+}
+
+***************************TRACCIA*******************************
+Esercizio 2.2
+Implementare la funzione:
+TipoLista combinazione(TipoLista lucchetto, int password);
+che riceva in input una lista lucchetto e un intero password.
+La funzione deve effettuare tante rotazioni sinistre quante sono necessarie affinché il primo elemento coincida con password.
+Si assuma che password possa essere trovato in lucchetto.
+In ogni caso, la funzione deve restituire una nuova lista.
+
+ESEMPI:
+lucchetto: [0, 1, 2]     password: 2    return: [2, 0, 1]
+lucchetto: [0, 1, 2]     password: 0    return: [0, 1, 2]
+lucchetto: [1, 2, 3, 3]  password: 3  return: [3, 3, 1, 2]
+
+****************************IMPLEMENTAZIONE************************************
+
+TipoLista copia(TipoLista l){ //faccio la copia perchè nella traccia c'è scritto: In ogni caso, la funzione deve restituire una nuova lista.
   if(estVuota(l)) return listaVuota();
   else return cons(car(l),copia(cdr(l))); 
 }
-
-TipoLista append ( TipoLista l , T e){
-if( estVuota (l)) return cons (e ,l) ;
-else return cons (car(l),append(cdr(l),e));
-}
-
-TipoLista ruota(TipoLista l) {
-	if(estVuota(l)) return listaVuota();
-  	else return append(copia(cdr(l)),car(l));
- }
-
+//funzione principale
 TipoLista combinazione(TipoLista lucchetto, int password) {
-  if (estVuota(lucchetto)) return listaVuota();
-    if (car(lucchetto) == password) return copia(lucchetto);
-    return combinazione(ruota(lucchetto), password);
+  while(lucchetto->info!=password ){
+    lucchetto=ruota(lucchetto);
+  }
+  return copia(lucchetto);
 }
