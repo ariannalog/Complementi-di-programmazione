@@ -1,0 +1,13 @@
+
+#include "aux.h"
+void sostituisci_numeri(TipoSCL *list, const char *s) {
+  if(s==NULL || *list==NULL) return;
+  if((*list)->info>='0' && (*list)->info<='9'){
+    TipoSCL temp=(*list)->next;
+    *list=(TipoSCL)malloc(sizeof(TipoNodoSCL));
+    (*list)->info=*s;
+    (*list)->next=temp;
+    sostituisci_numeri(&((*list)->next),s+1);
+  }
+  else sostituisci_numeri(&((*list)->next),s);
+}
