@@ -26,10 +26,10 @@ int cambia_segno_e_massima_somma(Mat* m) {
 
   for(int i=0;i<n;i++){
     for(int j=0;j<n;j++){
-      if(i<j && i+j<n-1 && i<n/2) nord  += ris->mat[i][j];
-      if(i>j && i+j<n-1 && j<n/2) ovest += ris->mat[i][j];
-      if(i>j && i+j>n-1 && i>n/2) sud   += ris->mat[i][j];
-      if(i<j && i+j>n-1 && j>n/2) est   += ris->mat[i][j];
+      if(i<j && i+j<n-1) nord  += ris->mat[i][j];
+      if(i>j && i+j<n-1) ovest += ris->mat[i][j];
+      if(i>j && i+j>n-1) sud   += ris->mat[i][j];
+      if(i<j && i+j>n-1) est   += ris->mat[i][j];
     }
 }
 return max(max(max(nord,est),ovest),sud);
