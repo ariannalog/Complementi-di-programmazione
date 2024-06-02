@@ -1,9 +1,15 @@
+******************************TRACCIA********************************
+Si scriva una funzione:
+int cambia_segno_e_massima_somma(Mat* m);
+che data in input una matrice di interi m NxN, con N dispari, prima inverte il segno di tutti gli elementi la cui somma tra indice di riga
+e indice di colonna è dispari, e successivamente ritorna il massimo tra la somma degli elementi dei quadranti della matrice. Definiamo quadranti di una matrice,
+le 4 porzioni della matrice che sono racchiuse tra le sue 2 diagonali (elementi della diagonale esclusi).
 
+**************************IMPLEMENTAZIONE****************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <math.h>
-
 #include "aux.h"
 
 //questa funzione cambia di segno 
@@ -18,36 +24,38 @@ Mat* cambia_segno(Mat*m){
   return ris;
 }
 
-
 int cambia_segno_e_massima_somma(Mat* m) {
   double somma=0;
   double somma_max=-100;
-Mat*ris=cambia_segno(m);
-mat_print(ris);
-  for(int i=0;i<(int)ris->rows/2;i++){  //quadrante nord
+  Mat*ris=cambia_segno(m);
+
+  for(int i=0;i<ris->rows;i++){  //quadrante nord
     for(int j=0;j<ris->cols;j++){
-      if(i!=j && (i+j)!=ris->rows-1 && j!=0 && j!=ris->cols-1) somma+=ris->mat[i][j];
+      if(i<j && i+j<m->rows-1 && i<(int)m->rows/2) somma+=ris->mat[i][j];
       }
     }
   if(somma>somma_max) somma_max=somma;
   somma=0;
-  for(int k=0;k<ris->rows;k++){ //quadrante ovest
-    for(int h=0;h<(int)ris->cols/2;h++){
-      if(k!=h && (k+h)!=ris->rows-1 && k!=0 && k!=ris->rows-1) somma+=ris->mat[k][h];
+
+  for(int k=0;k<ris->rows;k++){  //quadrante ovest
+    for(int h=0;h<ris->cols;h++){
+      if(k>h && k+h<m->rows-1 && h<(int)m->cols/2) somma+=ris->mat[k][h];
     }
   }
   if(somma>somma_max) somma_max=somma;
   somma=0;
-  for(int a=ris->rows/2+1;a<ris->rows;a++){ //quadrante sud
-    for(int b=0;b<(int)ris->cols;b++){
-      if(a!=b && a+b!=ris->rows-1 && b!=0 && b!=ris->cols-1) somma+=ris->mat[a][b];
+
+  for(int a=0;a<ris->rows;a++){  //quadrante sud
+    for(int b=0;b<ris->cols;b++){
+      if(a>b && a+b>m->rows-1 && a>m->rows/2) somma+=ris->mat[a][b];
     }
   }
   if(somma>somma_max) somma_max=somma;
   somma=0;
-  for(int y=0;y<ris->rows;y++){
-    for(int u=ris->cols/2+1;u<ris->cols;u++){ //quadrante est
-      if(y!=u && y+u!=ris->rows-1 && y!=0 && y!=ris->rows-1) somma+=ris->mat[y][u];
+
+  for(int y=0;y<ris->rows;y++){  //quadrante est
+    for(int u=0;u<ris->cols;u++){
+      if(y<u && y+u>m->rows-1 && u>m->cols/2) somma+=ris->mat[y][u];
     }
   }
   if(somma>somma_max) somma_max=somma;
